@@ -8,8 +8,17 @@
       "started": "2026-07-21T23:11:51.219665+08:00",
       "finished": null,
       "result": null
+    },
+    {
+      "id": 2,
+      "task": "OCR 667页（5线程并发）",
+      "status": "running",
+      "agent": "ocr_concurrent",
+      "started": "2026-07-21T23:18:15.454776+08:00",
+      "finished": null,
+      "result": null
     }
   ],
-  "counter": 1,
+  "counter": 2,
   "created": "2026-07-21T22:52:00+08:00"
 }
