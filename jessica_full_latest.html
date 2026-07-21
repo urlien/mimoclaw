@@ -3412,7 +3412,7 @@ const DEFAULT_JESSICA_AVATAR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ
 
     <!-- ☁️ 云同步 -->
     <div class="settings-section">
-      <div class="settings-section-title">☁️ 云同步（GitHub Gist）</div>
+      <div class="settings-section-title">☁️ 云同步（GitHub）</div>
       <p class="hint" style="margin-bottom:8px;">数据备份到你的私有 Gist，换手机/重装后可恢复。Token 仅存在本地。</p>
       <label>GitHub Token</label>
       <input type="password" id="gistToken" placeholder="ghp_xxxx" style="width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-family:monospace;padding:8px;outline:none;" />
@@ -21092,15 +21092,18 @@ const cloudSync = {
     return res.json();
   },
 
-  async _findGist(token) {
-    const savedId = localStorage.getItem('jessica_gist_id');
-    if (savedId) {
-      try { const g = await this._api('GET', `/gists/${savedId}`, null, token); return g; } catch(e) { localStorage.removeItem('jessica_gist_id'); }
-    }
-    const gists = await this._api('GET', '/gists?per_page=100', null, token);
-    const found = gists.find(g => g.description === this.GIST_DESC && !g.public);
-    if (found) { localStorage.setItem('jessica_gist_id', found.id); return found; }
-    return null;
+  REPO_OWNER: 'urlien',
+  REPO_NAME: 'jessica-data',
+  FILE_PATH: 'jessica-backup.json',
+
+  async _getFile(token) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${this.REPO_OWNER}/${this.REPO_NAME}/contents/${this.FILE_PATH}`, {
+        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' },
+      });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch(e) { return null; }
   },
 
   async backup() {
@@ -21113,40 +21116,25 @@ const cloudSync = {
     const sizeKB = (content.length / 1024).toFixed(1);
     this._show(`数据大小 ${sizeKB}KB，正在上传...`);
     try {
-      const existing = await this._findGist(token);
+      const existing = await this._getFile(token);
       const now = new Date();
-      const ts = now.toISOString().slice(0,19).replace(/[T:]/g,'-');
-      const filename = `jessica-backup-${ts}.json`;
-      // 获取已有文件列表，保留最近 3 个备份
-      let files = {};
-      if (existing) {
-        for (const [k, v] of Object.entries(existing.files)) {
-          if (k.startsWith('jessica-backup-')) files[k] = v;
-        }
-      }
-      // 添加新备份
-      files[filename] = { content };
-      // 超过 5 个备份时删除最旧的
-      const sorted = Object.keys(files).sort();
-      while (sorted.length > 3) {
-        const oldest = sorted.shift();
-        files[oldest] = null; // GitHub API: 设为 null 删除文件
-      }
       const body = {
-        description: this.GIST_DESC,
-        public: false,
-        files,
+        message: `备份 ${now.toLocaleString('zh-CN')}`,
+        content: btoa(unescape(encodeURIComponent(content))),
       };
-      let result;
-      if (existing) {
-        result = await this._api('PATCH', `/gists/${existing.id}`, body, token);
-        this._show(`✅ 已备份 (${sizeKB}KB) — ${now.toLocaleString('zh-CN')}，保留最近 ${Math.min(Object.keys(files).filter(k=>files[k]).length, 3)} 个版本`);
-      } else {
-        result = await this._api('POST', '/gists', body, token);
-        localStorage.setItem('jessica_gist_id', result.id);
-        this._show(`✅ 已创建备份 (${sizeKB}KB) — Gist ID: ${result.id.slice(0,8)}...`);
-      }
+      if (existing) body.sha = existing.sha;
+      const res = await fetch(`https://api.github.com/repos/${this.REPO_OWNER}/${this.REPO_NAME}/contents/${this.FILE_PATH}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err.message || `GitHub API ${res.status}`); }
       localStorage.setItem('jessica_last_backup', now.toISOString());
+      this._show(`✅ 已备份 (${sizeKB}KB) — ${now.toLocaleString('zh-CN')}`);
       showToast('☁️ 备份成功！');
     } catch(e) {
       this._show(`❌ 备份失败: ${e.message}`);
@@ -21160,21 +21148,15 @@ const cloudSync = {
     this._saveToken(token);
     this._show('正在查找备份...');
     try {
-      const gist = await this._findGist(token);
-      if (!gist) { this._show('❌ 未找到备份（请先备份一次）'); return; }
-      // 找最新的备份文件
-      const backupFiles = Object.values(gist.files)
-        .filter(f => f.filename.startsWith('jessica-backup-'))
-        .sort((a, b) => b.filename.localeCompare(a.filename));
-      if (!backupFiles.length) { this._show('❌ Gist 中无备份文件'); return; }
-      const latest = backupFiles[0];
-      this._show(`正在下载最新备份: ${latest.filename}...`);
-      const res = await fetch(latest.raw_url);
-      const data = await res.json();
+      const file = await this._getFile(token);
+      if (!file) { this._show('❌ 未找到备份（请先备份一次）'); return; }
+      this._show('正在下载备份...');
+      const content = decodeURIComponent(escape(atob(file.content)));
+      const data = JSON.parse(content);
       this._show('正在恢复数据...');
       if (await this._restoreData(data)) {
         showToast('✅ 数据已恢复！即将刷新页面...');
-        this._show(`✅ 从 ${latest.filename} 恢复成功，3 秒后刷新...`);
+        this._show('✅ 恢复成功，3 秒后刷新...');
         setTimeout(() => location.reload(), 3000);
       }
     } catch(e) {
@@ -21188,12 +21170,10 @@ const cloudSync = {
     if (!token) { showToast('❌ 请先输入 GitHub Token'); return; }
     this._saveToken(token);
     try {
-      const gist = await this._findGist(token);
+      const file = await this._getFile(token);
       const lastBackup = localStorage.getItem('jessica_last_backup');
-      if (gist) {
-        const updated = new Date(gist.updated_at).toLocaleString('zh-CN');
-        const size = Object.values(gist.files).reduce((s, f) => s + (f.size || 0), 0);
-        this._show(`✅ 备份存在 — 更新于 ${updated}，大小 ${(size/1024).toFixed(1)}KB${lastBackup ? '，上次本地备份: ' + new Date(lastBackup).toLocaleString('zh-CN') : ''}`);
+      if (file) {
+        this._show(`✅ 备份存在 — 大小 ${(file.size/1024).toFixed(1)}KB${lastBackup ? '，上次本地备份: ' + new Date(lastBackup).toLocaleString('zh-CN') : ''}`);
       } else {
         this._show('⚠️ 无备份记录，点击「备份到云端」创建');
       }

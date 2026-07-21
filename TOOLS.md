@@ -44,3 +44,6 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - BWIKI 干员语音: `https://wiki.biligame.com/arknights/index.php?title=[干员名]/默认/中文-普通话&action=raw`
 
 Add whatever helps you do your job. This is your cheat sheet.
+
+### GitHub
+- Personal Access Token (PAT): 见 agent auth-profiles，赵于2026-07-22提供（更正版）
