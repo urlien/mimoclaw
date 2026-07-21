@@ -25,3 +25,4 @@ voice-clones/
 .openclaw/mimo-key.txt
 .github-token
 node_modules/
+.openclaw/credentials/
