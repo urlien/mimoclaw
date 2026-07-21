@@ -1,0 +1,12 @@
+{
+  "scripts": [
+    {
+      "name": "状态栏渲染",
+      "comment": "捕获KV数据块LS▶...◀LE，渲染为怀黍离风格可视化面板",
+      "pattern": "LS▶([\\s\\S]*?)◀LE",
+      "replacement": "<!-- 状态栏HTML见 07-状态栏-怀黍离风格.html -->",
+      "flags": "g",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+<style id="shu-style-rain">
+/* ═══════════════════════════════════════
+   黍 · 墨壤 — 深秋大荒城的雨后黄昏
+   土色主调，泥土、麦穗、炊烟的温度
+   元素：墨迹笔刷边框 / 纸张纤维底纹 / 
+         古卷式引号 / 田垄纹理 / 炊烟渐变
+   ═══════════════════════════════════════ */
+
+:root {
+    --bg: #100E0A;
+    --card: rgba(24, 20, 14, 0.93);
+    --soil: #8B7355;
+    --soil-light: #B09070;
+    --soil-pale: #D0B898;
+    --soil-dark: #5A4A30;
+    --wheat: #C8A050;
+    --wheat-light: #E0C878;
+    --wheat-dim: #8A7040;
+    --text: #D4CCC0;
+    --text-sub: #807060;
+}
+
+/* ── 背景：田垄夜色 + 怀黍离古卷底图 + 炊烟微光 ── */
+.chat, body {
+    background-color: var(--bg) !important;
+    background-image:
+        url('https://i.postimg.cc/J7Tx415c/ce5dfda259e0f4d6104a57ef97487d58.jpg'),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)' opacity='0.035'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 70% 50% at 50% 85%, rgba(200,160,80,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 30% at 50% 100%, rgba(139,115,85,0.05) 0%, transparent 50%) !important;
+    background-size: cover, auto, auto, auto !important;
+    background-position: center, center, center, center !important;
+    background-blend-mode: overlay, normal, normal, normal !important;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "PingFang SC", serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* ── AI气泡：古卷质感 + 墨迹左边框 ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left {
+    background-color: var(--card) !important;
+    background-image:
+        /* 古卷横向纹理（比竹简更密） */
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 22px,
+            rgba(139,115,85,0.03) 22px,
+            rgba(139,115,85,0.03) 23px
+        ) !important;
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+    border: 1px solid rgba(139,115,85,0.08) !important;
+    /* 墨迹左边框：泥土色渐变 */
+    border-left: 3px solid transparent !important;
+    border-image: linear-gradient(180deg,
+        rgba(139,115,85,0.2) 0%,
+        rgba(139,115,85,0.7) 15%,
+        rgba(139,115,85,1) 50%,
+        rgba(139,115,85,0.7) 85%,
+        rgba(139,115,85,0.2) 100%) 1 !important;
+    border-radius: 2px 10px 10px 10px !important;
+    color: var(--text) !important;
+    text-shadow: none !important;
+    font-weight: 400 !important;
+    line-height: 1.9 !important;
+    padding: 16px 18px !important;
+    box-shadow:
+        0 4px 24px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(139,115,85,0.04) !important;
+    position: relative !important;
+}
+
+/* 气泡右上角：田字印章 */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left::after {
+    content: '田' !important;
+    position: absolute !important;
+    top: 6px !important;
+    right: 8px !important;
+    font-size: 10px !important;
+    color: rgba(139,115,85,0.15) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    font-family: "Noto Serif SC", serif !important;
+}
+
+/* ── 引号对话：麦穗金 + 暖光 ── */
+.chat .item .touch-scope .content.left font,
+.chat .item .touch-scope .content.left font[color],
+.chat .item .touch-scope .content.left .name {
+    color: var(--wheat-light) !important;
+    font-weight: 500 !important;
+    text-shadow:
+        0 0 12px rgba(224,200,120,0.25),
+        0 0 4px rgba(224,200,120,0.12) !important;
+}
+
+/* ── 用户气泡：麦秆色边框 ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.right {
+    background-color: rgba(24, 20, 14, 0.9) !important;
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+    border: 1px solid rgba(200,160,80,0.1) !important;
+    border-right: 3px solid var(--wheat) !important;
+    border-radius: 10px 2px 10px 10px !important;
+    color: var(--text) !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* ── 输入框 ── */
+.chat .chat-bottom textarea,
+.u-input__content__field-wrapper__field {
+    color: var(--text) !important;
+    background-color: rgba(24, 20, 14, 0.92) !important;
+    border: 1px solid rgba(139,115,85,0.08) !important;
+    border-radius: 10px !important;
+}
+
+/* ── 全局文字 ── */
+p, span, div, li, td { color: var(--text) !important; }
+a { color: var(--wheat-light) !important; }
+strong, b { color: var(--soil-pale) !important; }
+hr {
+    border: none !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(139,115,85,0.3), transparent) !important;
+}
+blockquote {
+    border-left: 3px solid var(--soil-dark) !important;
+    background: rgba(139,115,85,0.04) !important;
+    color: var(--text-sub) !important;
+}
+</style>

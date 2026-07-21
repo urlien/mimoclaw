@@ -1,0 +1,161 @@
+<!-- 黍角色卡状态栏模板 — 基于KV数据块格式 -->
+<!-- 正则捕获 LS▶...◀LE 后替换为以下HTML -->
+
+<div class="shu-status-bar">
+  <!-- 顶部：场景信息 -->
+  <div class="shu-header">
+    <div class="shu-scene">
+      <span class="shu-icon">🌾</span>
+      <span class="shu-location">{{loc}}</span>
+    </div>
+    <div class="shu-time">{{dt}}</div>
+  </div>
+
+  <!-- 角色卡片区域 -->
+  <div class="shu-characters">
+    <!-- 黍的卡片 -->
+    <div class="shu-card shu-card-main">
+      <div class="shu-card-avatar">
+        <img src="{{c1img}}" alt="黍" onerror="this.style.display='none'"/>
+        <div class="shu-avatar-placeholder">🌾</div>
+      </div>
+      <div class="shu-card-info">
+        <div class="shu-card-name">{{c1n}}</div>
+        <div class="shu-card-role">{{c1a}}</div>
+        <div class="shu-card-detail">
+          <div class="shu-detail-row"><span class="shu-label">👗</span> {{c1l}}</div>
+          <div class="shu-detail-row"><span class="shu-label">🎯</span> {{c1c}}</div>
+          <div class="shu-detail-row"><span class="shu-label">💭</span> {{c1f}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 博士的卡片 -->
+    <div class="shu-card shu-card-user">
+      <div class="shu-card-avatar">
+        <div class="shu-avatar-placeholder">🩺</div>
+      </div>
+      <div class="shu-card-info">
+        <div class="shu-card-name">{{un}}</div>
+        <div class="shu-card-role">{{ua}}</div>
+        <div class="shu-card-detail">
+          <div class="shu-detail-row"><span class="shu-label">👗</span> {{ul}}</div>
+          <div class="shu-detail-row"><span class="shu-label">🎯</span> {{uc}}</div>
+          <div class="shu-detail-row"><span class="shu-label">💭</span> {{uf}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部：好感度 + 情节概要 -->
+  <div class="shu-footer">
+    <div class="shu-stats">
+      <div class="shu-stat">
+        <span class="shu-stat-label">好感</span>
+        <div class="shu-stat-bar"><div class="shu-stat-fill" style="width:{{favor}}%"></div></div>
+        <span class="shu-stat-value">{{favor}}</span>
+      </div>
+      <div class="shu-stat">
+        <span class="shu-stat-label">信任</span>
+        <div class="shu-stat-bar"><div class="shu-stat-fill" style="width:{{trust}}%"></div></div>
+        <span class="shu-stat-value">{{trust}}</span>
+      </div>
+    </div>
+    <div class="shu-summary">
+      <span class="shu-icon">📖</span> {{sum}}
+    </div>
+  </div>
+</div>
+
+<style>
+.shu-status-bar {
+  background: linear-gradient(145deg, #2A2A2A 0%, #1E2E1E 100%);
+  border: 1px solid #3E6B3E;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 8px 0;
+  font-family: 'Microsoft YaHei', sans-serif;
+  color: #D4D4D4;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.shu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #3E6B3E;
+  margin-bottom: 10px;
+}
+
+.shu-scene { display: flex; align-items: center; gap: 6px; }
+.shu-location { color: #8FBC8F; font-weight: bold; font-size: 14px; }
+.shu-time { color: #888; font-size: 12px; }
+.shu-icon { font-size: 14px; }
+
+.shu-characters { display: flex; gap: 10px; margin-bottom: 10px; }
+
+.shu-card {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.shu-card-main { border-color: #5B8C5A; }
+.shu-card-user { border-color: #C8A96E; }
+
+.shu-card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2A2A2A;
+}
+
+.shu-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.shu-avatar-placeholder { font-size: 24px; }
+
+.shu-card-info { flex: 1; min-width: 0; }
+.shu-card-name { font-size: 15px; font-weight: bold; color: #8FBC8F; margin-bottom: 2px; }
+.shu-card-role { font-size: 11px; color: #888; margin-bottom: 6px; }
+
+.shu-card-detail { font-size: 12px; }
+.shu-detail-row { margin-bottom: 3px; display: flex; gap: 4px; }
+.shu-label { flex-shrink: 0; }
+
+.shu-footer { border-top: 1px solid #333; padding-top: 8px; }
+
+.shu-stats { display: flex; gap: 16px; margin-bottom: 6px; }
+.shu-stat { display: flex; align-items: center; gap: 6px; flex: 1; }
+.shu-stat-label { font-size: 12px; color: #888; min-width: 28px; }
+.shu-stat-bar {
+  flex: 1;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.shu-stat-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5B8C5A, #8FBC8F);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.shu-stat-value { font-size: 11px; color: #8FBC8F; min-width: 24px; text-align: right; }
+
+.shu-summary { font-size: 12px; color: #999; display: flex; align-items: center; gap: 4px; }
+
+/* 响应式 */
+@media (max-width: 600px) {
+  .shu-characters { flex-direction: column; }
+  .shu-card { padding: 8px; }
+}
+</style>

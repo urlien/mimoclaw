@@ -1,0 +1,36 @@
+{
+  "scripts": [
+    {
+      "name": "全局美化-日间",
+      "comment": "开场白中触发，注入日间CSS主题",
+      "pattern": "全局美化1",
+      "replacement": "<style>:root{--primary:#5B8C5A;--primary-light:#8FBC8F;--primary-dark:#3E6B3E;--accent:#C8A96E;--bg-main:#F5F0E8;--bg-card:#FFFCF5;--text-main:#2C2C2C;--text-sub:#6B6B6B;--border:#D4CDB8;--bubble-ai:#F0EDE4;--bubble-user:#E8F0E8;--input-bg:#FFFCF5}body,.chat-container,[class*=chat],[class*=message]{background-color:var(--bg-main)!important}[class*=bot],[class*=ai]{background:var(--bubble-ai)!important;border-left:3px solid var(--primary)!important;color:var(--text-main)!important}[class*=user],[class*=my]{background:var(--bubble-user)!important;border-right:3px solid var(--accent)!important;color:var(--text-main)!important}textarea,[class*=input]{background:var(--input-bg)!important;border:1px solid var(--border)!important;color:var(--text-main)!important}button{background:var(--primary)!important;color:#fff!important}::-webkit-scrollbar-thumb{background:var(--accent)!important}</style>",
+      "flags": "g",
+      "enabled": true
+    },
+    {
+      "name": "全局美化-夜间",
+      "comment": "开场白中触发，注入夜间CSS主题",
+      "pattern": "全局美化2",
+      "replacement": "<style>:root{--primary:#6B9B6B;--primary-light:#8FBC8F;--accent:#C8A96E;--bg-main:#1A1A1A;--bg-card:#222;--text-main:#D4D4D4;--text-sub:#888;--border:#333;--bubble-ai:#252525;--bubble-user:#1E2E1E;--input-bg:#222}body,.chat-container,[class*=chat],[class*=message]{background-color:var(--bg-main)!important}[class*=bot],[class*=ai]{background:var(--bubble-ai)!important;border-left:3px solid var(--primary)!important;color:var(--text-main)!important}[class*=user],[class*=my]{background:var(--bubble-user)!important;border-right:3px solid var(--accent)!important;color:var(--text-main)!important}textarea,[class*=input]{background:var(--input-bg)!important;border:1px solid var(--border)!important;color:var(--text-main)!important}button{background:var(--primary)!important;color:#eee!important}::-webkit-scrollbar-thumb{background:#4A4A4A!important}</style>",
+      "flags": "g",
+      "enabled": true
+    },
+    {
+      "name": "状态栏渲染",
+      "comment": "捕获KV数据块LS▶...◀LE，渲染为可视化面板",
+      "pattern": "LS▶([\\s\\S]*?)◀LE",
+      "replacement": "<div class='shu-status-bar'><div class='shu-header'><div class='shu-scene'><span class='shu-icon'>🌾</span> $1</div></div></div><style>.shu-status-bar{background:linear-gradient(145deg,#2A2A2A,#1E2E1E);border:1px solid #3E6B3E;border-radius:12px;padding:12px;margin:8px 0;color:#D4D4D4;font-family:'Microsoft YaHei',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.3)}.shu-header{padding-bottom:8px;border-bottom:1px solid #3E6B3E;margin-bottom:8px}.shu-scene{display:flex;align-items:center;gap:6px}.shu-icon{font-size:14px}</style>",
+      "flags": "g",
+      "enabled": true
+    },
+    {
+      "name": "选项按钮渲染",
+      "comment": "捕获行动选项，渲染为可点击按钮",
+      "pattern": "DGS_KV_TIPS_START▶tips:(.*?);◀DGS_KV_TIPS_END",
+      "replacement": "<div class='shu-tips'>$1</div><style>.shu-tips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.shu-tips button{background:#5B8C5A!important;color:#fff!important;border:none!important;border-radius:8px!important;padding:6px 12px!important;font-size:13px!important;cursor:pointer!important;transition:all .2s!important}.shu-tips button:hover{background:#3E6B3E!important;transform:translateY(-1px)!important}</style>",
+      "flags": "g",
+      "enabled": true
+    }
+  ]
+}

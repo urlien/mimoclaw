@@ -1,0 +1,131 @@
+// NSFW_STATUSES 扩展版 — 全拼音标注
+// 丝袜细分 + 情趣玩具细分
+
+const NSFW_STATUSES = [
+  // === 原有 5 个 ===
+  {text:'zai kan se qing pian', emoji:'🔥', nsfwOnly:true},
+  {text:'zai zi wei', emoji:'💦', nsfwOnly:true},
+  {text:'zai kan ben zi', emoji:'📕', nsfwOnly:true},
+  {text:'zai huan xiang zhong', emoji:'🫠', nsfwOnly:true},
+  {text:'zai kan xiao huang wen', emoji:'📝', nsfwOnly:true},
+
+  // === sheng li lei ===
+  {text:'zai xi zao', emoji:'🚿', nsfwOnly:true, detail:'re shui hen shu fu'},
+  {text:'zai tu shen ti ru', emoji:'🧴', nsfwOnly:true, detail:'pi fu hao hua'},
+  {text:'zai huan yi fu', emoji:'👙', nsfwOnly:true, detail:'shi xin mai de'},
+  {text:'zhao jing zi', emoji:'🪞', nsfwOnly:true, detail:'zi wo xin shang'},
+  {text:'shui qian zhao gu', emoji:'💋', nsfwOnly:true},
+
+  // === si wa xi fen (12 zhong) ===
+  {text:'chuan hei se si wa', emoji:'🖤', nsfwOnly:true, detail:'jing dian'},
+  {text:'chuan bai se si wa', emoji:'🤍', nsfwOnly:true, detail:'qing chun'},
+  {text:'chuan rou se si wa', emoji:'🩰', nsfwOnly:true, detail:'qin fu se'},
+  {text:'chuan yu wang si wa', emoji:'🕸️', nsfwOnly:true, detail:'ye xing'},
+  {text:'chuan dai dai si wa', emoji:'🎀', nsfwOnly:true, detail:'diao dai'},
+  {text:'chuan guo xi si wa', emoji:'🦵', nsfwOnly:true, detail:'xue bai da tui'},
+  {text:'chuan lian ti si wa', emoji:'🖤', nsfwOnly:true, detail:'quan shen'},
+  {text:'chuan lei si si wa', emoji:'🕸️', nsfwOnly:true, detail:'jing zhi'},
+  {text:'chuan po dong si wa', emoji:'💔', nsfwOnly:true, detail:'sui yi feng'},
+  {text:'chuan jian bian si wa', emoji:'🌈', nsfwOnly:true, detail:'hei dao rou'},
+  {text:'chuan hua wen si wa', emoji:'🌸', nsfwOnly:true, detail:'hua bian'},
+  {text:'chuan yin si si wa', emoji:'✨', nsfwOnly:true, detail:'shan shan de'},
+
+  // === qing qu wan ju — zhen dong lei ===
+  {text:'wan zhen dong bang', emoji:'🔮', nsfwOnly:true, detail:'mo shi duo'},
+  {text:'wan xi ru qi', emoji:'💜', nsfwOnly:true, detail:'xi pan shi'},
+  {text:'wan tiao pin qi', emoji:'🔵', nsfwOnly:true, detail:'yao kong'},
+  {text:'wan dan tiao dan', emoji:'🥚', nsfwOnly:true, detail:'sui shen dai'},
+  {text:'wan chuan dong zhen dong', emoji:'⚡', nsfwOnly:true, detail:'qiang'},
+  {text:'wan liao bo qi', emoji:'💫', nsfwOnly:true, detail:'ci ji'},
+  {text:'wan gong zhuang zhen dong', emoji:'👸', nsfwOnly:true, detail:'ke ai'},
+
+  // === qing qu wan ju — xi ru/shu fu lei ===
+  {text:'wan xi xiao kuan', emoji:'🩷', nsfwOnly:true, detail:'jin zhi'},
+  {text:'wan xi pen', emoji:'🌊', nsfwOnly:true, detail:'wen re shui liu'},
+  {text:'wan ru jia', emoji:'🔗', nsfwOnly:true, detail:'jia zi'},
+  {text:'wan la zhu', emoji:'🕯️', nsfwOnly:true, detail:'re la'},
+  {text:'wan shu fu dai', emoji:'🎀', nsfwOnly:true, detail:'bang zhu'},
+  {text:'wan yan zhao', emoji:'🙈', nsfwOnly:true, detail:'kan bu dao'},
+  {text:'wan kou qiu', emoji:'⚫', nsfwOnly:true, detail:'shuo bu chu hua'},
+
+  // === qing qu wan ju — qi ta ===
+  {text:'wan dao mo', emoji:'🪶', nsfwOnly:true, detail:'qing rou pai'},
+  {text:'wan zhi ya qiu', emoji:'🎯', nsfwOnly:true, detail:'da zai shen shang'},
+  {text:'wan jing you', emoji:'🫧', nsfwOnly:true, detail:'hua hua de'},
+  {text:'wan bing kuai', emoji:'🧊', nsfwOnly:true, detail:'bing bing de'},
+  {text:'wan re la', emoji:'🌶️', nsfwOnly:true, detail:'re re de'},
+  {text:'wan ma wei bian', emoji:'🐍', nsfwOnly:true, detail:'qing qing da'},
+  {text:'wan ya zi qiu', emoji:'🐥', nsfwOnly:true, detail:'jia yi xia'},
+  {text:'wan qian ru qi', emoji:'🫰', nsfwOnly:true, detail:'man man lai'},
+
+  // === huan xiang/diao qing ===
+  {text:'zai xiang ni', emoji:'💭', nsfwOnly:true, detail:'xi huan bei bao'},
+  {text:'zai lian hong', emoji:'😳', nsfwOnly:true, detail:'you xiang dao na xie'},
+  {text:'xiu xiu de xiang', emoji:'🙈', nsfwOnly:true, detail:'bu hao yi si'},
+  {text:'zai bian ju ben', emoji:'✍️', nsfwOnly:true, detail:'xia yi bu'},
+  {text:'zai nao bu', emoji:'🫠', nsfwOnly:true, detail:'xi huan na ge zi shi'},
+  {text:'tou tou xiang ni', emoji:'👀', nsfwOnly:true, detail:'bei kan zhe'},
+
+  // === mei ri qing qu ===
+  {text:'zai chuang shang', emoji:'🛏️', nsfwOnly:true, detail:'bu xiang dong'},
+  {text:'zai lai chuang', emoji:'😴', nsfwOnly:true, detail:'bei wo hao nuan'},
+  {text:'shi nei yi', emoji:'👙', nsfwOnly:true, detail:'hao kan ma'},
+  {text:'zai pao zao', emoji:'🛁', nsfwOnly:true, detail:'hen jiu le'},
+  {text:'zuo mian mo', emoji:'🧖', nsfwOnly:true, detail:'hu fu'},
+  {text:'he hong jiu', emoji:'🍷', nsfwOnly:true, detail:'shang tou'},
+  {text:'ting ai mei ge', emoji:'🎵', nsfwOnly:true, detail:'qi fen hao'},
+  {text:'kan lian ai shuo', emoji:'💕', nsfwOnly:true, detail:'bi xian shi tian'},
+
+  // === yu yan you zhi ===
+  {text:'zai ji mo', emoji:'🥀', nsfwOnly:true, detail:'xi huan you ren pei'},
+  {text:'yu yan you zhi', emoji:'😶', nsfwOnly:true, detail:'xiang shuo bu gan'},
+  {text:'deng xin hao', emoji:'💌', nsfwOnly:true, detail:'ni dong de'},
+  {text:'ren zhu bu shuo', emoji:'🤐', nsfwOnly:true, detail:'shuo le ni xiu'},
+  {text:'hui wei shang ci', emoji:'😏', nsfwOnly:true, detail:'na ci shu fu'},
+  {text:'xiang xia ci', emoji:'🫢', nsfwOnly:true, detail:'shi shi bie de'},
+
+  // === zhong kou wei ===
+  {text:'wan shou fu', emoji:'🎀', nsfwOnly:true, detail:'bei bang zhu'},
+  {text:'yan chu', emoji:'🎭', nsfwOnly:true, detail:'jin tian yan shui'},
+  {text:'bei qi fu', emoji:'😈', nsfwOnly:true, detail:'xiao yi dian'},
+  {text:'qiu rao', emoji:'🥺', nsfwOnly:true, detail:'bu gan le'},
+  {text:'bei cheng fa', emoji:'⚡', nsfwOnly:true, detail:'ci ji'},
+  {text:'dang xiao gou', emoji:'🐶', nsfwOnly:true, detail:'ting hua'},
+  {text:'dang xiao mao', emoji:'🐱', nsfwOnly:true, detail:'mo mo wo'},
+  {text:'dang nv pu', emoji:'🎀', nsfwOnly:true, detail:'zhu ren hui lai le'},
+  {text:'dang gong zhu', emoji:'👸', nsfwOnly:true, detail:'fu shi wo'},
+
+  // === NV fu ===
+  {text:'chuan nv pu zhuang', emoji:'🎀', nsfwOnly:true, detail:'zhu ren'},
+  {text:'dai mao er', emoji:'🐱', nsfwOnly:true, detail:'miao~'},
+  {text:'da ban', emoji:'💄', nsfwOnly:true, detail:'jin tian shi shui'},
+  {text:'chuan jk', emoji:'🎀', nsfwOnly:true, detail:'xue sheng'},
+  {text:'chuan qi pao', emoji:'👗', nsfwOnly:true, detail:'gong zhu'},
+  {text:'chuan hu li jing', emoji:'🦊', nsfwOnly:true, detail:'yao jing'},
+  {text:'chuan tu er', emoji:'🐰', nsfwOnly:true, detail:'bunny'},
+];
+
+// shui mian NV fu
+const NSFW_SLEEP_STATUSES = [
+  {text:'zuo le ge meng', emoji:'💤', nsfwOnly:true, detail:'meng li you ni'},
+  {text:'shui bu zhao', emoji:'🌙', nsfwOnly:true, detail:'zai xiang ni'},
+  {text:'bei wo li dong', emoji:'🫠', nsfwOnly:true, detail:'re'},
+];
+
+// STATUS_DETAILS 扩展
+const NSFW_STATUS_DETAILS = {
+  'zai zi wei': ['man man de', 'kuai le', 'xiang zhe ni', 'xiao sheng'],
+  'zai huan xiang zhong': ['he ni', 'bei bao zhu', 'qin qin', 'geng duo'],
+  'hui wei shang ci': ['na ge dong zuo', 'na ju hua', 'na ge yan shen'],
+  'chuan hei se si wa': ['bo li si', 'chou si', 'mian si'],
+  'chuan bai se si wa': ['qing chun', 'gan jing', 'ke ai'],
+  'chuan yu wang si wa': ['da wang', 'xiao wang', 'mi ji'],
+  'chuan guo xi si wa': ['hei se', 'bai se', 'rou se'],
+  'chuan lian ti si wa': ['quan shen', 'liu ti', 'kai dang'],
+  'wan zhen dong bang': ['di pin', 'gao pin', 'sui ji', 'mai dong'],
+  'wan xi ru qi': ['qian ru', 'shen ru', 'man man lai'],
+  'wan tiao pin qi': ['di pin', 'gao pin', 'sui ji', 'mo shi qie huan'],
+  'wan xi pen': ['wen re', 'qiang', 'ruo', 'mai dong'],
+  'wan shu fu dai': ['bang shou', 'bang jiao', 'quan shen'],
+  'wan la zhu': ['di zai bei shang', 'man man liu', 'hen re'],
+};

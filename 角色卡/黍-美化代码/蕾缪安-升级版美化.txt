@@ -1,0 +1,224 @@
+<style id="lemuen-aurora-v2">
+/* ═══════════════════════════════════════
+   蕾缪安 · 极光信使 — 全局美化 v2
+   配色：暗夜黑金 + 冰蓝极光 + 薄荷绿光晕
+   灵感：拉特兰信使的夜行、堕天使的羽翼
+   ═══════════════════════════════════════ */
+
+:root {
+    /* 核心色板 */
+    --bg-deep: #0D0D12;
+    --bg-mid: #13131A;
+    --bg-card: rgba(19, 19, 26, 0.92);
+    --bg-card-hover: rgba(25, 25, 35, 0.95);
+
+    /* 极光色系 */
+    --aurora-cyan: #5CE0D6;
+    --aurora-blue: #4A9EFF;
+    --aurora-purple: #9B7BFF;
+    --aurora-glow: rgba(92, 224, 214, 0.15);
+
+    /* 金属色 */
+    --gold: #C8A55A;
+    --gold-light: #E8D5A0;
+    --gold-dim: #8A7440;
+
+    /* 文字 */
+    --text-main: #E8E4E0;
+    --text-sub: #8A8690;
+    --text-quote: #5CE0D6;
+    --text-narrative: #D0CCC8;
+
+    /* 玻璃效果 */
+    --glass-blur: blur(20px) saturate(180%);
+    --glass-border: rgba(92, 224, 214, 0.12);
+}
+
+/* ── 全局基底 ── */
+.chat, body, .app, [class*="page"] {
+    background: var(--bg-deep) !important;
+    background-image:
+        radial-gradient(ellipse 80% 50% at 20% 80%, rgba(92,224,214,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(155,123,255,0.03) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 50% 50%, rgba(19,19,26,1) 0%, rgba(13,13,18,1) 100%) !important;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.3px !important;
+    color: var(--text-main) !important;
+}
+
+/* ── 顶部导航栏 ── */
+.header, .chat-header, [class*="header"],
+.navbar, [class*="navbar"], [class*="top-bar"] {
+    background: linear-gradient(180deg, rgba(13,13,18,0.98) 0%, rgba(19,19,26,0.95) 100%) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+}
+
+/* ── AI消息气泡（左侧） ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left,
+[class*="bot-message"], [class*="ai-message"], [class*="left"] {
+    background: var(--bg-card) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-left: 3px solid var(--aurora-cyan) !important;
+    border-radius: 2px 12px 12px 12px !important;
+    color: var(--text-narrative) !important;
+    text-shadow: none !important;
+    font-weight: 400 !important;
+    line-height: 1.8 !important;
+    padding: 12px 16px !important;
+    box-shadow:
+        0 4px 24px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(92,224,214,0.05) !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+}
+
+/* AI气泡悬停微光 */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left:hover {
+    border-left-color: var(--aurora-blue) !important;
+    box-shadow:
+        0 4px 32px rgba(92,224,214,0.08),
+        inset 0 1px 0 rgba(92,224,214,0.08) !important;
+}
+
+/* ── 引号内对话：冰蓝发光 ── */
+.chat .item .touch-scope .content.left font,
+.chat .item .touch-scope .content.left font[color],
+.chat .item .touch-scope .content.left .name,
+.chat .item .touch-scope .content.left em,
+.chat .item .touch-scope .content.left i {
+    color: var(--aurora-cyan) !important;
+    font-weight: 500 !important;
+    text-shadow: 0 0 12px rgba(92,224,214,0.4), 0 0 4px rgba(92,224,214,0.2) !important;
+    font-style: normal !important;
+}
+
+/* ── 用户消息气泡（右侧） ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.right,
+[class*="user-message"], [class*="my-message"], [class*="right"] {
+    background: linear-gradient(135deg, rgba(200,165,90,0.08) 0%, rgba(19,19,26,0.9) 100%) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid rgba(200,165,90,0.15) !important;
+    border-right: 3px solid var(--gold) !important;
+    border-radius: 12px 2px 12px 12px !important;
+    color: var(--text-main) !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+}
+
+/* ── 输入框 ── */
+.chat .chat-bottom textarea,
+.u-input__content__field-wrapper__field,
+textarea, [class*="input"] {
+    background: rgba(19,19,26,0.9) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    color: var(--text-main) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+}
+
+/* 输入框聚焦光效 */
+textarea:focus, [class*="input"]:focus {
+    border-color: var(--aurora-cyan) !important;
+    box-shadow: 0 0 16px rgba(92,224,214,0.1) !important;
+}
+
+/* ── 按钮 ── */
+button, [class*="btn"] {
+    background: linear-gradient(135deg, var(--aurora-cyan) 0%, var(--aurora-blue) 100%) !important;
+    color: #0D0D12 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 2px 12px rgba(92,224,214,0.2) !important;
+    transition: all 0.3s ease !important;
+}
+button:hover, [class*="btn"]:hover {
+    background: linear-gradient(135deg, var(--aurora-blue) 0%, var(--aurora-purple) 100%) !important;
+    box-shadow: 0 4px 20px rgba(92,224,214,0.3) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── 选项按钮 ── */
+.option-btn, [class*="option"], [class*="choice"] {
+    background: rgba(92,224,214,0.08) !important;
+    border: 1px solid rgba(92,224,214,0.2) !important;
+    border-radius: 8px !important;
+    color: var(--aurora-cyan) !important;
+    transition: all 0.25s ease !important;
+}
+.option-btn:hover, [class*="option"]:hover, [class*="choice"]:hover {
+    background: rgba(92,224,214,0.15) !important;
+    border-color: var(--aurora-cyan) !important;
+    box-shadow: 0 0 16px rgba(92,224,214,0.12) !important;
+}
+
+/* ── 滚动条 ── */
+::-webkit-scrollbar { width: 6px !important; }
+::-webkit-scrollbar-track { background: var(--bg-deep) !important; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--aurora-cyan) 0%, var(--aurora-purple) 100%) !important;
+    border-radius: 3px !important;
+    opacity: 0.5;
+}
+
+/* ── 通用文字 ── */
+p, span, div, li, td, h1, h2, h3, h4 {
+    color: var(--text-main) !important;
+}
+a { color: var(--aurora-cyan) !important; }
+strong, b { color: var(--gold-light) !important; font-weight: 600 !important; }
+hr {
+    border: none !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent 0%, var(--aurora-cyan) 50%, transparent 100%) !important;
+    opacity: 0.3 !important;
+}
+blockquote {
+    border-left: 3px solid var(--aurora-purple) !important;
+    background: rgba(155,123,255,0.05) !important;
+    color: var(--text-sub) !important;
+}
+
+/* ── 代码块 ── */
+code, pre {
+    background: rgba(92,224,214,0.05) !important;
+    border: 1px solid rgba(92,224,214,0.1) !important;
+    border-radius: 6px !important;
+    color: var(--aurora-cyan) !important;
+}
+
+/* ── 分隔线/时间戳 ── */
+[class*="time"], [class*="date"], [class*="divider"] {
+    color: var(--text-sub) !important;
+    opacity: 0.6 !important;
+}
+
+/* ── 极光呼吸动画（可选，用于特殊元素） ── */
+@keyframes aurora-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes aurora-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ── 移动端适配 ── */
+@media (max-width: 600px) {
+    .chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left,
+    .chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.right {
+        padding: 10px 12px !important;
+        line-height: 1.7 !important;
+    }
+}
+</style>

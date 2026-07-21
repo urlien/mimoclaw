@@ -1,0 +1,211 @@
+<!-- 
+  黍状态栏 — 中国风/怀黍离风格
+  正则模式: LS▶([\\s\\S]*?)◀LE
+  替换内容: 下面全部HTML
+  替换时 $1 = 正则捕获组1（KV数据块原文）
+-->
+
+<div id="shu-bar" data-kv="$1"></div>
+
+<script>
+(function(){
+  var el=document.getElementById('shu-bar');
+  if(!el)return;
+  var raw=el.getAttribute('data-kv')||'';
+  var kv={};
+  raw.split(';;').forEach(function(pair){
+    var idx=pair.indexOf('::');
+    if(idx>0){kv[pair.substring(0,idx).trim()]=pair.substring(idx+2).trim();}
+  });
+  
+  var loc=kv['loc']||'未知';
+  var dt=kv['dt']||'';
+  var sum=kv['sum']||'';
+  var favor=parseInt(kv['favor'])||0;
+  var trust=parseInt(kv['trust'])||0;
+  var mood=kv['mood']||'平静';
+  
+  var c1n=kv['c1n']||'黍';
+  var c1a=kv['c1a']||'';
+  var c1l=kv['c1l']||'';
+  var c1c=kv['c1c']||'';
+  var c1f=kv['c1f']||'';
+  
+  var un=kv['un']||'博士';
+  var ua=kv['ua']||'';
+  var ul=kv['ul']||'';
+  var uc=kv['uc']||'';
+  var uf=kv['uf']||'';
+  
+  var intCount=kv['int']||'1';
+  
+  function bar(pct,cls){
+    return '<div class="sb-bar"><div class="sb-fill '+cls+'" style="width:'+pct+'%"></div></div>';
+  }
+  
+  el.innerHTML=
+  '<div class="sb-container">'+
+    '<div class="sb-ink-top"></div>'+
+    '<div class="sb-top">'+
+      '<div class="sb-loc"><span class="sb-ch">地</span>'+loc+'</div>'+
+      '<div class="sb-dt">'+dt+'</div>'+
+    '</div>'+
+    '<div class="sb-cards">'+
+      '<div class="sb-card sb-card-shu">'+
+        '<div class="sb-avatar">🌾</div>'+
+        '<div class="sb-info">'+
+          '<div class="sb-name">'+c1n+'</div>'+
+          '<div class="sb-role">'+c1a+'</div>'+
+          '<div class="sb-detail">'+
+            '<div><span class="sb-ch">衣</span>'+c1l+'</div>'+
+            '<div><span class="sb-ch">行</span>'+c1c+'</div>'+
+            '<div><span class="sb-ch">心</span>'+c1f+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="sb-card sb-card-doc">'+
+        '<div class="sb-avatar">🩺</div>'+
+        '<div class="sb-info">'+
+          '<div class="sb-name">'+un+'</div>'+
+          '<div class="sb-role">'+ua+'</div>'+
+          '<div class="sb-detail">'+
+            '<div><span class="sb-ch">衣</span>'+ul+'</div>'+
+            '<div><span class="sb-ch">行</span>'+uc+'</div>'+
+            '<div><span class="sb-ch">心</span>'+uf+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="sb-bottom">'+
+      '<div class="sb-stats">'+
+        '<div class="sb-stat"><span class="sb-stat-lbl">好感</span>'+bar(favor,'sb-fill-gold')+'<span class="sb-stat-val">'+favor+'</span></div>'+
+        '<div class="sb-stat"><span class="sb-stat-lbl">信任</span>'+bar(trust,'sb-fill-green')+'<span class="sb-stat-val">'+trust+'</span></div>'+
+        '<div class="sb-stat"><span class="sb-stat-lbl">心绪</span><span class="sb-mood">'+mood+'</span></div>'+
+      '</div>'+
+      '<div class="sb-summary"><span class="sb-ch">志</span> '+sum+' <span class="sb-int">#'+intCount+'</span></div>'+
+    '</div>'+
+    '<div class="sb-ink-bottom"></div>'+
+  '</div>';
+})();
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+.sb-container{
+  background:linear-gradient(160deg,#1E1E1A 0%,#252520 40%,#1A1A18 100%);
+  border:1px solid #3A3530;
+  border-radius:0;
+  padding:0;
+  margin:10px 0;
+  font-family:'Noto Serif SC','思源宋体','SimSun',serif;
+  color:#D4D0C8;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+  position:relative;
+  overflow:hidden;
+}
+
+/* 墨迹装饰条 */
+.sb-ink-top,.sb-ink-bottom{
+  height:4px;
+  background:linear-gradient(90deg,transparent 0%,#AC8B5F 20%,#E5BC86 50%,#AC8B5F 80%,transparent 100%);
+  opacity:.6;
+}
+
+.sb-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 14px 8px;
+  border-bottom:1px solid #2A2820;
+}
+
+.sb-loc{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#E5BC86;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+.sb-ch{
+  display:inline-block;
+  width:18px;
+  height:18px;
+  line-height:18px;
+  text-align:center;
+  font-size:11px;
+  color:#E5BC86;
+  border:1px solid #AC8B5F40;
+  border-radius:2px;
+  margin-right:4px;
+  font-weight:700;
+}
+
+.sb-dt{color:#666;font-size:11px;font-style:italic}
+
+.sb-cards{display:flex;gap:1px;padding:0;margin:0}
+
+.sb-card{
+  flex:1;
+  background:rgba(172,139,95,.03);
+  border-bottom:1px solid #2A2820;
+  padding:12px 14px;
+  display:flex;
+  gap:10px;
+}
+
+.sb-card-shu{border-left:2px solid #AC8B5F}
+.sb-card-doc{border-left:2px solid #B2222280}
+
+.sb-avatar{
+  width:40px;height:40px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#2A2820;
+  font-size:20px;
+  flex-shrink:0;
+  border:1px solid #3A3530;
+}
+
+.sb-info{flex:1;min-width:0}
+.sb-name{
+  font-size:15px;font-weight:700;
+  color:#E5BC86;
+  margin-bottom:2px;
+  letter-spacing:3px;
+}
+.sb-role{font-size:10px;color:#777;margin-bottom:5px;letter-spacing:1px}
+.sb-detail{font-size:11px;line-height:1.8;color:#AAA}
+.sb-detail div{margin-bottom:1px}
+
+.sb-bottom{padding:10px 14px;border-top:1px solid #2A2820}
+
+.sb-stats{display:flex;gap:14px;margin-bottom:6px}
+.sb-stat{display:flex;align-items:center;gap:5px;flex:1}
+.sb-stat-lbl{font-size:11px;color:#777;min-width:28px;letter-spacing:2px}
+.sb-bar{flex:1;height:4px;background:#2A2820;border-radius:2px;overflow:hidden}
+.sb-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.sb-fill-gold{background:linear-gradient(90deg,#8A6D42,#E5BC86)}
+.sb-fill-green{background:linear-gradient(90deg,#3E6B3E,#8FBC8F)}
+.sb-stat-val{font-size:10px;color:#AC8B5F;min-width:20px;text-align:right}
+.sb-mood{font-size:11px;color:#E5BC86;font-style:italic;letter-spacing:2px}
+
+.sb-summary{
+  font-size:11px;
+  color:#888;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  letter-spacing:1px;
+}
+.sb-int{color:#555;font-size:10px}
+
+@media(max-width:600px){
+  .sb-cards{flex-direction:column}
+  .sb-card{padding:8px 10px}
+  .sb-container{margin:6px 0}
+}
+</style>

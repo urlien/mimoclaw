@@ -1,0 +1,113 @@
+<!-- 
+  黍 · 怀黍离 — 美化切换侧边栏
+  
+  功能：
+  - 点击「禾」切换到青禾风格（绿色田野）
+  - 点击「壤」切换到墨壤风格（泥土暖色）
+  - 点击「素」关闭所有美化
+  
+  使用方式：放进开场白或正则替换
+  依赖：需要同时导入黍-晴日风格.txt和黍-雨夜风格.txt
+-->
+
+<style>
+.shu-sidebar {
+    position: fixed;
+    left: 0;
+    top: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 99999;
+    pointer-events: auto;
+}
+
+.shu-btn {
+    box-sizing: border-box;
+    width: 18px;
+    padding: 12px 3px;
+    background: rgba(16, 16, 12, 0.95);
+    border: 1px solid rgba(139, 115, 85, 0.12);
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    color: #707060;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    pointer-events: auto;
+    font-family: "Noto Serif SC", "SimSun", serif;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 墨迹底纹 */
+.shu-btn::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E") !important;
+    pointer-events: none !important;
+}
+
+.shu-btn:hover {
+    background: rgba(28, 26, 20, 0.98);
+    border-color: rgba(139, 115, 85, 0.25);
+    color: #C8B888;
+    transform: translateX(2px);
+}
+
+/* 禾（绿色激活态） */
+.shu-btn[data-state="active"] {
+    background: rgba(91, 140, 90, 0.1) !important;
+    border-color: rgba(91, 140, 90, 0.35) !important;
+    color: #8FBC8F !important;
+    text-shadow: 0 0 6px rgba(143,188,143,0.25) !important;
+}
+
+/* 壤（土色激活态） */
+.shu-btn[data-state="active-earth"] {
+    background: rgba(139, 115, 85, 0.1) !important;
+    border-color: rgba(139, 115, 85, 0.35) !important;
+    color: #D0B898 !important;
+    text-shadow: 0 0 6px rgba(208,184,152,0.25) !important;
+}
+
+/* 素（关闭态） */
+.shu-btn[data-state="off"] {
+    background: rgba(12, 12, 10, 0.95);
+    border-color: rgba(80, 80, 70, 0.08);
+    color: #444;
+}
+</style>
+
+<div class="shu-sidebar" onclick="event.stopPropagation()">
+    <div class="shu-btn" id="shu-btn-sunny" data-state="active"
+         onclick="event.stopPropagation();
+                  document.getElementById('shu-style-sunny').disabled = false;
+                  document.getElementById('shu-style-rain').disabled = true;
+                  document.querySelectorAll('.shu-btn').forEach(function(b){b.setAttribute('data-state','');});
+                  this.setAttribute('data-state', 'active');">
+        禾
+    </div>
+    <div class="shu-btn" id="shu-btn-rain" data-state=""
+         onclick="event.stopPropagation();
+                  document.getElementById('shu-style-sunny').disabled = true;
+                  document.getElementById('shu-style-rain').disabled = false;
+                  document.querySelectorAll('.shu-btn').forEach(function(b){b.setAttribute('data-state','');});
+                  this.setAttribute('data-state', 'active-earth');">
+        壤
+    </div>
+    <div class="shu-btn" id="shu-btn-plain" data-state=""
+         onclick="event.stopPropagation();
+                  document.getElementById('shu-style-sunny').disabled = true;
+                  document.getElementById('shu-style-rain').disabled = true;
+                  document.querySelectorAll('.shu-btn').forEach(function(b){b.setAttribute('data-state','');});
+                  this.setAttribute('data-state', 'off');">
+        素
+    </div>
+</div>

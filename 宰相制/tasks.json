@@ -1,0 +1,15 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "task": "有声书全流程：OCR 667页 + TTS",
+      "status": "running",
+      "agent": "subagent-pipeline",
+      "started": "2026-07-21T23:11:51.219665+08:00",
+      "finished": null,
+      "result": null
+    }
+  ],
+  "counter": 1,
+  "created": "2026-07-21T22:52:00+08:00"
+}

@@ -1,0 +1,66 @@
+<style>
+:root {
+  --primary: #AC8B5F;
+  --primary-light: #E5BC86;
+  --primary-dark: #8A6D42;
+  --accent: #B22222;
+  --accent-light: #D44;
+  --bg-main: #F5F0E6;
+  --bg-card: #FFFCF2;
+  --bg-sidebar: #EDE8D8;
+  --text-main: #2C2C2C;
+  --text-sub: #777;
+  --text-accent: #AC8B5F;
+  --border: #D4CDB8;
+  --shadow: rgba(172, 139, 95, 0.15);
+  --bubble-ai: #F0EDE4;
+  --bubble-user: #F5EFE0;
+  --input-bg: #FFFCF2;
+  --scrollbar-track: #EDE8D8;
+  --scrollbar-thumb: #AC8B5F;
+  --ink-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+body, .chat-container, [class*=chat], [class*=message] {
+  background-color: var(--bg-main) !important;
+  background-image: var(--ink-texture) !important;
+}
+
+.header, .chat-header, [class*=header] {
+  background: linear-gradient(135deg, #2C2C2C 0%, #3A3A3A 50%, #2C2C2C 100%) !important;
+  border-bottom: 2px solid var(--primary) !important;
+}
+
+.bubble-ai, [class*=bot], [class*=ai] {
+  background: var(--bubble-ai) !important;
+  border-left: 3px solid var(--primary) !important;
+  border-radius: 0 10px 10px 10px !important;
+  color: var(--text-main) !important;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+.bubble-user, [class*=user], [class*=my] {
+  background: var(--bubble-user) !important;
+  border-right: 3px solid var(--accent) !important;
+  border-radius: 10px 0 10px 10px !important;
+  color: var(--text-main) !important;
+}
+
+textarea, [class*=input] {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  color: var(--text-main) !important;
+}
+
+button { background: var(--primary) !important; color: #fff !important; border-radius: 6px !important; }
+button:hover { background: var(--primary-dark) !important; }
+
+::-webkit-scrollbar-track { background: var(--scrollbar-track) !important; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb) !important; border-radius: 5px !important; }
+
+p, span, div, li, td { color: var(--text-main) !important; }
+a { color: var(--text-accent) !important; }
+hr { border-color: var(--primary) !important; }
+blockquote { border-left: 4px solid var(--primary) !important; background: rgba(172,139,95,0.06) !important; }
+</style>

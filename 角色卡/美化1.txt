@@ -1,0 +1,295 @@
+<style id="shu-style-rain">
+/* ═══════════════════════════════════════
+   黍 · 墨壤 v2 — 深秋大荒城的雨后黄昏
+   土色主调，泥土、麦穗、炊烟的温度
+   元素：墨迹笔刷边框 / 纸张纤维底纹 / 
+         古卷式引号 / 田垄纹理 / 炊烟渐变
+   v2新增：行楷引号 / 墨迹分隔线 / 首字下沉 /
+           气泡四角墨点 / 章节标题 / 呼吸动画
+   ═══════════════════════════════════════ */
+
+:root {
+    --bg: #100E0A;
+    --card: rgba(24, 20, 14, 0.93);
+    --soil: #8B7355;
+    --soil-light: #B09070;
+    --soil-pale: #D0B898;
+    --soil-dark: #5A4A30;
+    --soil-ink: rgba(139,115,85,0.12);
+    --wheat: #C8A050;
+    --wheat-light: #E0C878;
+    --wheat-dim: #8A7040;
+    --text: #D4CCC0;
+    --text-sub: #807060;
+}
+
+/* ── 背景：田垄夜色 + 怀黍离古卷底图 + 炊烟微光 ── */
+.chat, body {
+    background-color: var(--bg) !important;
+    background-image:
+        url('https://i.postimg.cc/J7Tx415c/ce5dfda259e0f4d6104a57ef97487d58.jpg'),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)' opacity='0.035'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 70% 50% at 50% 85%, rgba(200,160,80,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 30% at 50% 100%, rgba(139,115,85,0.05) 0%, transparent 50%) !important;
+    background-size: cover, auto, auto, auto !important;
+    background-position: center, center, center, center !important;
+    background-blend-mode: overlay, normal, normal, normal !important;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "PingFang SC", serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* ── AI气泡：古卷质感 + 墨迹左边框 ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left {
+    background-color: var(--card) !important;
+    background-image:
+        /* 古卷横向纹理（比竹简更密） */
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 22px,
+            rgba(139,115,85,0.03) 22px,
+            rgba(139,115,85,0.03) 23px
+        ) !important;
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+    border: 1px solid rgba(139,115,85,0.08) !important;
+    /* 墨迹左边框：泥土色渐变 */
+    border-left: 3px solid transparent !important;
+    border-image: linear-gradient(180deg,
+        rgba(139,115,85,0.2) 0%,
+        rgba(139,115,85,0.7) 15%,
+        rgba(139,115,85,1) 50%,
+        rgba(139,115,85,0.7) 85%,
+        rgba(139,115,85,0.2) 100%) 1 !important;
+    border-radius: 2px 10px 10px 10px !important;
+    color: var(--text) !important;
+    text-shadow: none !important;
+    font-weight: 400 !important;
+    line-height: 1.9 !important;
+    padding: 16px 18px !important;
+    box-shadow:
+        0 4px 24px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(139,115,85,0.04) !important;
+    position: relative !important;
+}
+
+/* 气泡右上角：田字印章 */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left::after {
+    content: '田' !important;
+    position: absolute !important;
+    top: 6px !important;
+    right: 8px !important;
+    font-size: 10px !important;
+    color: rgba(139,115,85,0.15) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    font-family: "Noto Serif SC", serif !important;
+}
+
+/* ── 气泡四角墨点装饰 ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left .text::before {
+    content: '·' !important;
+    position: absolute !important;
+    bottom: 6px !important;
+    left: 8px !important;
+    font-size: 18px !important;
+    color: rgba(139,115,85,0.25) !important;
+    font-weight: 700 !important;
+    pointer-events: none !important;
+    font-family: 'Noto Serif SC', serif !important;
+    text-shadow: 0 0 6px rgba(139,115,85,0.15) !important;
+}
+
+/* ══════════════════════════════════════
+   【新增】引号内对话 — 行楷 + 暖光呼吸
+   ══════════════════════════════════════ */
+
+/* 引号文字：行楷字体 + 大一号半 + 下划线 */
+.chat .item .touch-scope .content.left font,
+.chat .item .touch-scope .content.left font[color],
+.chat .item .touch-scope .content.left .name,
+.chat .item .touch-scope .content.left em,
+.chat .item .touch-scope .content.left i {
+    color: var(--wheat-light) !important;
+    font-family: "STXingkai", "华文行楷", "FZShuTi", "方正舒体", "KaiTi", "楷体", serif !important;
+    font-size: 1.38em !important;
+    font-weight: 500 !important;
+    line-height: 2.1 !important;
+    text-decoration: underline !important;
+    text-decoration-color: rgba(224,200,120,0.25) !important;
+    text-underline-offset: 4px !important;
+    text-decoration-style: solid !important;
+    text-shadow:
+        0 0 14px rgba(224,200,120,0.3),
+        0 0 4px rgba(224,200,120,0.12) !important;
+    /* 暖光呼吸 */
+    animation: shu-quote-glow-rain 3s ease-in-out infinite !important;
+}
+
+@keyframes shu-quote-glow-rain {
+    0%, 100% { text-shadow: 0 0 14px rgba(224,200,120,0.3), 0 0 4px rgba(224,200,120,0.12); }
+    50% { text-shadow: 0 0 22px rgba(224,200,120,0.45), 0 0 8px rgba(224,200,120,0.22); }
+}
+
+/* ── 斜体/叙述文字 ── */
+/* 合并到引号文字样式中，统一处理 */
+
+/* ══════════════════════════════════════
+   【新增】首字下沉 — 古卷开篇感
+   ══════════════════════════════════════ */
+
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left p:first-of-type::first-letter {
+    float: left !important;
+    font-size: 2.2em !important;
+    line-height: 1 !important;
+    padding-right: 6px !important;
+    padding-top: 2px !important;
+    color: var(--wheat-light) !important;
+    font-family: "STXingkai", "华文行楷", "FZShuTi", "KaiTi", "楷体", serif !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(200,160,80,0.15) !important;
+}
+
+/* ══════════════════════════════════════
+   【新增】墨迹分隔线 — 笔刷质感
+   ══════════════════════════════════════ */
+
+.chat .item .touch-scope .content.left hr,
+.chat .item .touch-scope .content.right hr {
+    border: none !important;
+    height: 6px !important;
+    background:
+        linear-gradient(90deg,
+            transparent 0%,
+            rgba(139,115,85,0.05) 10%,
+            rgba(139,115,85,0.25) 30%,
+            rgba(139,115,85,0.4) 50%,
+            rgba(139,115,85,0.25) 70%,
+            rgba(139,115,85,0.05) 90%,
+            transparent 100%) !important;
+    /* 墨迹飞白纹理 */
+    background-image:
+        linear-gradient(90deg,
+            transparent 0%,
+            rgba(139,115,85,0.05) 10%,
+            rgba(139,115,85,0.25) 30%,
+            rgba(139,115,85,0.4) 50%,
+            rgba(139,115,85,0.25) 70%,
+            rgba(139,115,85,0.05) 90%,
+            transparent 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='6'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='6' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E") !important;
+    border-radius: 3px !important;
+    margin: 12px 0 !important;
+    opacity: 0.8 !important;
+}
+
+/* ══════════════════════════════════════
+   【新增】引号装饰 — 墨迹背景左引号
+   ══════════════════════════════════════ */
+
+.chat .item .touch-scope .content.left blockquote::before {
+    content: '「' !important;
+    position: absolute !important;
+    left: -2px !important;
+    top: -4px !important;
+    font-size: 2em !important;
+    color: rgba(139,115,85,0.1) !important;
+    font-family: "Noto Serif SC", "SimSun", serif !important;
+    font-weight: 700 !important;
+    pointer-events: none !important;
+}
+
+/* ══════════════════════════════════════
+   【新增】章节标题 — 墨迹底纹标签
+   ══════════════════════════════════════ */
+
+.chat .item .touch-scope .content.left strong:first-child,
+.chat .item .touch-scope .content.left b:first-child {
+    display: inline-block !important;
+    color: var(--soil-pale) !important;
+    font-size: 0.95em !important;
+    font-weight: 600 !important;
+    letter-spacing: 2px !important;
+    padding: 2px 10px !important;
+    margin-bottom: 6px !important;
+    background: rgba(139,115,85,0.06) !important;
+    border-left: 2px solid var(--soil) !important;
+    border-radius: 0 4px 4px 0 !important;
+}
+
+/* ── 用户气泡：麦秆色边框 ── */
+.chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.right {
+    background-color: rgba(24, 20, 14, 0.9) !important;
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+    border: 1px solid rgba(200,160,80,0.1) !important;
+    border-right: 3px solid var(--wheat) !important;
+    border-radius: 10px 2px 10px 10px !important;
+    color: var(--text) !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* ── 输入框 ── */
+.chat .chat-bottom textarea,
+.u-input__content__field-wrapper__field {
+    color: var(--text) !important;
+    background-color: rgba(24, 20, 14, 0.92) !important;
+    border: 1px solid rgba(139,115,85,0.08) !important;
+    border-radius: 10px !important;
+}
+
+/* ── 输入框聚焦 ── */
+.chat .chat-bottom textarea:focus,
+.u-input__content__field-wrapper__field:focus {
+    border-color: rgba(139,115,85,0.2) !important;
+    box-shadow: 0 0 12px rgba(139,115,85,0.08) !important;
+}
+
+/* ── 滚动条 ── */
+::-webkit-scrollbar { width: 5px !important; }
+::-webkit-scrollbar-track { background: var(--bg) !important; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--soil-dark), var(--soil)) !important;
+    border-radius: 3px !important;
+}
+
+/* ── 代码块 ── */
+code, pre {
+    background: rgba(139,115,85,0.06) !important;
+    border: 1px solid rgba(139,115,85,0.12) !important;
+    border-radius: 4px !important;
+    color: var(--wheat-light) !important;
+}
+
+/* ── 全局文字 ── */
+p, span, div, li, td { color: var(--text) !important; }
+a { color: var(--wheat-light) !important; }
+strong, b { color: var(--soil-pale) !important; }
+
+/* ── blockquote：古卷式引用 ── */
+blockquote {
+    border-left: 3px solid var(--soil-dark) !important;
+    background: rgba(139,115,85,0.04) !important;
+    color: var(--text-sub) !important;
+    padding: 8px 12px !important;
+    border-radius: 0 6px 6px 0 !important;
+    position: relative !important;
+}
+
+/* ── 移动端适配 ── */
+@media (max-width: 600px) {
+    .chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left {
+        padding: 12px 14px !important;
+        line-height: 1.8 !important;
+    }
+    .chat .item .touch-scope .content.left font,
+    .chat .item .touch-scope .content.left font[color] {
+        font-size: 1.08em !important;
+    }
+    .chat .chat-scope-box .scroll-view .chat-body .item .touch-scope .content.left p:first-of-type::first-letter {
+        font-size: 1.8em !important;
+    }
+}
+</style>

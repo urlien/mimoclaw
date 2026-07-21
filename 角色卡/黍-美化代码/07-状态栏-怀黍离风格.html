@@ -1,0 +1,376 @@
+<!-- 
+  黍状态栏 v1 — 怀黍离风格
+  正则模式: LS▶([\s\S]*?)◀LE
+  替换内容: 下面全部HTML
+  替换时 $1 = KV数据块原文（JS解析）
+-->
+
+<div id="shu-bar" data-kv="$1"></div>
+
+<script>
+(function(){
+  var el=document.getElementById('shu-bar');
+  if(!el)return;
+  var raw=el.getAttribute('data-kv')||'';
+  var kv={};
+  raw.split(';;').forEach(function(pair){
+    var idx=pair.indexOf('::');
+    if(idx>0){kv[pair.substring(0,idx).trim()]=pair.substring(idx+2).trim();}
+  });
+
+  var loc=kv['loc']||'未知';
+  var dt=kv['dt']||'';
+  var sum=kv['sum']||'';
+  var favor=parseInt(kv['favor'])||0;
+  var trust=parseInt(kv['trust'])||0;
+  var mood=kv['mood']||'平静';
+  var intCount=kv['int']||'1';
+
+  var c1n=kv['c1n']||'黍';
+  var c1a=kv['c1a']||'';
+  var c1l=kv['c1l']||'';
+  var c1c=kv['c1c']||'';
+  var c1f=kv['c1f']||'';
+  var c1img=kv['c1img']||'';
+
+  var un=kv['un']||'博士';
+  var ua=kv['ua']||'';
+  var ul=kv['ul']||'';
+  var uc=kv['uc']||'';
+  var uf=kv['uf']||'';
+
+  function bar(pct,cls){
+    return '<div class="sb-bar"><div class="sb-fill '+cls+'" style="width:'+Math.min(100,Math.max(0,pct))+'%"></div></div>';
+  }
+
+  function avatarHtml(src, fallback){
+    if(src) return '<img src="'+src+'" onerror="this.parentNode.innerHTML=\''+fallback+'\'">';
+    return '<span>'+fallback+'</span>';
+  }
+
+  el.innerHTML=
+  '<div class="sb-wrap">'+
+    /* 顶部墨迹装饰 */
+    '<div class="sb-ink-bar"></div>'+
+    
+    /* 场景头部 */
+    '<div class="sb-header">'+
+      '<div class="sb-loc"><span class="sb-seal">地</span>'+loc+'</div>'+
+      '<div class="sb-dt">'+dt+'</div>'+
+    '</div>'+
+    
+    /* 角色区域 */
+    '<div class="sb-people">'+
+      /* 黍 */
+      '<div class="sb-person sb-person-shu">'+
+        '<div class="sb-avatar">'+avatarHtml(c1img,'🌾')+'</div>'+
+        '<div class="sb-info">'+
+          '<div class="sb-name">'+c1n+'</div>'+
+          '<div class="sb-role">'+c1a+'</div>'+
+          '<div class="sb-details">'+
+            '<div class="sb-detail-row"><span class="sb-tag">衣</span>'+c1l+'</div>'+
+            '<div class="sb-detail-row"><span class="sb-tag">行</span>'+c1c+'</div>'+
+            '<div class="sb-detail-row"><span class="sb-tag">心</span>'+c1f+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      /* 博士 */
+      '<div class="sb-person sb-person-doc">'+
+        '<div class="sb-avatar">'+avatarHtml('','🩺')+'</div>'+
+        '<div class="sb-info">'+
+          '<div class="sb-name">'+un+'</div>'+
+          '<div class="sb-role">'+ua+'</div>'+
+          '<div class="sb-details">'+
+            '<div class="sb-detail-row"><span class="sb-tag">衣</span>'+ul+'</div>'+
+            '<div class="sb-detail-row"><span class="sb-tag">行</span>'+uc+'</div>'+
+            '<div class="sb-detail-row"><span class="sb-tag">心</span>'+uf+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    
+    /* 数值区 */
+    '<div class="sb-stats">'+
+      '<div class="sb-stat">'+
+        '<span class="sb-stat-lbl">好感</span>'+
+        bar(favor,'sb-fill-gold')+
+        '<span class="sb-stat-val">'+favor+'</span>'+
+      '</div>'+
+      '<div class="sb-stat">'+
+        '<span class="sb-stat-lbl">信任</span>'+
+        bar(trust,'sb-fill-green')+
+        '<span class="sb-stat-val">'+trust+'</span>'+
+      '</div>'+
+      '<div class="sb-mood-row">'+
+        '<span class="sb-stat-lbl">心绪</span>'+
+        '<span class="sb-mood">'+mood+'</span>'+
+      '</div>'+
+    '</div>'+
+    
+    /* 情节概要 */
+    '<div class="sb-summary">'+
+      '<span class="sb-seal">志</span> '+sum+
+      ' <span class="sb-int">#'+intCount+'</span>'+
+    '</div>'+
+    
+    /* 底部墨迹装饰 */
+    '<div class="sb-ink-bar sb-ink-bottom"></div>'+
+  '</div>';
+})();
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+/* ═══════════════════════════════
+   黍状态栏 — 怀黍离风格
+   配色：墨底 + 古铜金 + 青禾绿
+   ═══════════════════════════════ */
+
+.sb-wrap{
+  background:linear-gradient(160deg,#121210 0%,#1a1a16 40%,#141412 100%);
+  border:1px solid rgba(172,139,95,0.15);
+  border-radius:0;
+  padding:0;
+  margin:12px 0;
+  font-family:'Noto Serif SC','思源宋体','SimSun',serif;
+  color:#D4D0C8;
+  box-shadow:0 4px 24px rgba(0,0,0,.45);
+  position:relative;
+  overflow:hidden;
+  max-width:500px;
+}
+
+/* 墨迹装饰条 */
+.sb-ink-bar{
+  height:3px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(172,139,95,0.1) 10%,
+    rgba(172,139,95,0.5) 30%,
+    rgba(229,188,134,0.8) 50%,
+    rgba(172,139,95,0.5) 70%,
+    rgba(172,139,95,0.1) 90%,
+    transparent 100%);
+  opacity:.7;
+}
+.sb-ink-bottom{
+  opacity:.4;
+}
+
+/* 宣纸噪点底纹 */
+.sb-wrap::before{
+  content:''!important;
+  position:absolute!important;
+  inset:0!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E")!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+
+/* ── 场景头部 ── */
+.sb-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 14px 8px;
+  border-bottom:1px solid rgba(172,139,95,0.08);
+  position:relative;
+  z-index:1;
+}
+
+.sb-loc{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#E5BC86;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+.sb-seal{
+  display:inline-block;
+  width:18px;
+  height:18px;
+  line-height:18px;
+  text-align:center;
+  font-size:11px;
+  color:#AC8B5F;
+  border:1px solid rgba(172,139,95,0.25);
+  border-radius:2px;
+  font-weight:700;
+  flex-shrink:0;
+}
+
+.sb-dt{
+  color:rgba(138,134,128,0.7);
+  font-size:11px;
+  font-style:italic;
+  letter-spacing:1px;
+}
+
+/* ── 角色区域 ── */
+.sb-people{
+  display:flex;
+  gap:1px;
+  position:relative;
+  z-index:1;
+}
+
+.sb-person{
+  flex:1;
+  padding:12px 14px;
+  display:flex;
+  gap:10px;
+  border-bottom:1px solid rgba(172,139,95,0.06);
+}
+
+.sb-person-shu{
+  border-left:2px solid rgba(172,139,95,0.4);
+  background:rgba(172,139,95,0.02);
+}
+.sb-person-doc{
+  border-left:2px solid rgba(178,34,34,0.25);
+  background:rgba(178,34,34,0.015);
+}
+
+.sb-avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(26,26,22,0.8);
+  flex-shrink:0;
+  border:1px solid rgba(172,139,95,0.12);
+  overflow:hidden;
+  font-size:18px;
+}
+.sb-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.sb-info{flex:1;min-width:0}
+.sb-name{
+  font-size:14px;
+  font-weight:700;
+  color:#E5BC86;
+  margin-bottom:1px;
+  letter-spacing:3px;
+}
+.sb-role{
+  font-size:10px;
+  color:rgba(138,134,128,0.6);
+  margin-bottom:4px;
+  letter-spacing:1px;
+}
+
+.sb-details{font-size:11px;line-height:1.7}
+.sb-detail-row{
+  display:flex;
+  gap:4px;
+  margin-bottom:1px;
+  color:rgba(212,208,200,0.7);
+}
+.sb-tag{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  line-height:16px;
+  text-align:center;
+  font-size:9px;
+  color:rgba(172,139,95,0.6);
+  border:1px solid rgba(172,139,95,0.12);
+  border-radius:2px;
+  flex-shrink:0;
+  font-weight:600;
+}
+
+/* ── 数值区 ── */
+.sb-stats{
+  padding:10px 14px;
+  border-top:1px solid rgba(172,139,95,0.06);
+  position:relative;
+  z-index:1;
+}
+
+.sb-stat{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:5px;
+}
+.sb-stat-lbl{
+  font-size:11px;
+  color:rgba(138,134,128,0.6);
+  min-width:28px;
+  letter-spacing:2px;
+}
+.sb-bar{
+  flex:1;
+  height:4px;
+  background:rgba(26,26,22,0.8);
+  border-radius:2px;
+  overflow:hidden;
+}
+.sb-fill{
+  height:100%;
+  border-radius:2px;
+  transition:width .6s ease;
+}
+.sb-fill-gold{
+  background:linear-gradient(90deg,#8A6D42,#E5BC86);
+}
+.sb-fill-green{
+  background:linear-gradient(90deg,#3E6B3E,#8FBC8F);
+}
+.sb-stat-val{
+  font-size:10px;
+  color:#AC8B5F;
+  min-width:20px;
+  text-align:right;
+  font-weight:600;
+}
+
+.sb-mood-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.sb-mood{
+  font-size:11px;
+  color:#E5BC86;
+  font-style:italic;
+  letter-spacing:2px;
+}
+
+/* ── 情节概要 ── */
+.sb-summary{
+  padding:8px 14px 10px;
+  font-size:11px;
+  color:rgba(138,134,128,0.5);
+  display:flex;
+  align-items:center;
+  gap:4px;
+  letter-spacing:1px;
+  border-top:1px solid rgba(172,139,95,0.04);
+  position:relative;
+  z-index:1;
+}
+.sb-int{
+  color:rgba(80,80,70,0.5);
+  font-size:10px;
+  margin-left:auto;
+}
+
+/* ── 移动端 ── */
+@media(max-width:600px){
+  .sb-people{flex-direction:column}
+  .sb-person{padding:10px 12px}
+  .sb-wrap{margin:8px 0}
+}
+</style>

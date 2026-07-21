@@ -1,0 +1,65 @@
+<style>@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.35}}
+.shu-sb{background:#f0ebe0!important;max-width:500px;margin:0 auto;color:#1a1a1a!important;font-size:13px;line-height:1.7;position:relative;overflow:hidden;border:3px solid #5b8c5a;border-radius:2px;box-shadow:0 0 0 1px rgba(91,140,90,0.2),0 4px 12px rgba(0,0,0,0.15),0 8px 28px rgba(0,0,0,0.1);font-family:'Noto Serif SC','SimSun',serif}
+.shu-sb::before{content:'';position:absolute;inset:0;background:url('https://i.postimg.cc/8PZRfp6b/image.png') center/cover;opacity:0.5;pointer-events:none;z-index:0}
+.shu-sb::after{content:'';position:absolute;inset:0;background:url('https://i.postimg.cc/vHt8HTCg/image.png') center/cover;opacity:0.5;pointer-events:none;z-index:0}
+.shu-sb>*{position:relative;z-index:1}
+.shu-sb .lb{color:#777!important;font-weight:600}
+.shu-sb .vl{color:#1a1a1a!important;font-weight:700}
+.shu-sb .shu-thought{color:#444!important}
+.shu-sb .shu-time{color:#888!important}
+.shu-sb .shu-round{color:#aaa!important}
+.shu-sb .shu-bar-lb{color:#777!important}
+.shu-sb .shu-bar-v{color:#5b8c5a!important}
+.shu-sb .shu-loc{color:#777!important}
+.shu-sb .shu-opt{color:#2a5a2a!important}
+.shu-sb .shu-name{color:#3e6b3e!important}
+.shu-sb .shu-stitle{color:#3e6b3e!important}
+.shu-sb .shu-outfit-tag{color:#5b8c5a!important}
+.shu-sb .shu-term-m{color:#2a5a2a!important}
+.shu-sb .shu-term-s{color:#3e6b3e!important}
+.shu-top{display:flex;align-items:center;justify-content:center;padding:10px 16px;gap:8px;border-bottom:1px solid rgba(91,140,90,0.12)}
+.shu-top img{height:22px;opacity:0.65}
+.shu-top .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(91,140,90,0.3),transparent)}
+.shu-hd{display:flex;justify-content:space-between;align-items:flex-end;padding:12px 16px 10px;border-bottom:2px solid rgba(91,140,90,0.15)}
+.shu-hd-l{display:flex;align-items:flex-end;gap:10px}
+.shu-name{font-family:'LiSim','隶书','Noto Serif SC','SimSun',serif;font-size:30px;font-weight:900;color:#3e6b3e!important;letter-spacing:4px;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,0.08)}
+.shu-hd-r{text-align:right}
+.shu-time{font-size:12px;color:#888!important;font-style:italic;animation:twinkle 3s ease-in-out infinite;font-weight:600}
+.shu-round{font-size:11px;color:#aaa!important;letter-spacing:1px;margin-top:1px}
+.shu-ct{padding:0 16px}
+.shu-sec{padding:10px 12px;border:1.5px solid rgba(91,140,90,0.15);border-radius:3px;margin-bottom:6px;background:rgba(255,255,255,0.3)!important;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.shu-sec .shu-row{padding:3px 8px;border-radius:2px;border-bottom:1px solid rgba(91,140,90,0.08)}
+.shu-sec .shu-row:last-child{border-bottom:none}
+.shu-sec .shu-row:nth-child(odd){background:rgba(91,140,90,0.05)}
+.shu-sec .shu-row:nth-child(even){background:rgba(255,255,255,0.15)}
+.shu-sec .shu-bar-w{padding:5px 8px;background:rgba(91,140,90,0.05);border-radius:3px;border:1px solid rgba(91,140,90,0.08);margin:3px 0}
+.shu-sec:last-of-type{margin-bottom:0}
+.shu-stitle{font-family:'LiSim','隶书','Noto Serif SC','SimSun',serif;font-size:17px;font-weight:900;color:#3e6b3e!important;letter-spacing:3px;margin-bottom:6px;display:flex;align-items:center;gap:8px;text-shadow:0 1px 1px rgba(0,0,0,0.06)}
+.shu-stitle .ic{width:22px;height:22px;opacity:0.65}
+.shu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px 14px}
+.shu-row{display:flex;justify-content:space-between;padding:2px 0;font-size:12px}
+.shu-bar-w{display:flex;align-items:center;gap:6px;margin:4px 0}
+.shu-bar-lb{font-size:11px;color:#777!important;min-width:28px;letter-spacing:2px;font-weight:700}
+.shu-bar{flex:1;height:5px;background:rgba(91,140,90,0.1);border-radius:3px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,0.06)}
+.shu-bar-f{height:100%;border-radius:3px;transition:width 0.6s}
+.shu-bar-f.gold{background:linear-gradient(90deg,#8a6d42,#c8b888);box-shadow:0 1px 2px rgba(138,109,66,0.2)}
+.shu-bar-f.green{background:linear-gradient(90deg,#3e6b3e,#8fbc8f);box-shadow:0 1px 2px rgba(62,107,62,0.2)}
+.shu-bar-v{font-size:11px;color:#5b8c5a!important;min-width:20px;text-align:right;font-weight:700}
+.shu-thought{font-size:12px;color:#444!important;padding:6px 10px;background:rgba(91,140,90,0.04);border-left:2px solid rgba(91,140,90,0.25);margin:4px 0;font-style:italic;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.04);border-radius:0 3px 3px 0}
+.shu-outfit{display:flex;gap:8px;font-size:12px;margin-bottom:4px}
+.shu-outfit-tag{padding:2px 10px;border:1.5px solid rgba(91,140,90,0.2);border-radius:3px;color:#5b8c5a!important;font-size:11px;cursor:pointer;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+.shu-outfit-tag.active{background:rgba(91,140,90,0.12);border-color:rgba(91,140,90,0.4)}
+.shu-loc{padding:8px 0;font-size:13px;color:#777!important;letter-spacing:1px;font-weight:700;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(91,140,90,0.08)}
+.shu-loc .loc-ic{width:22px;height:22px}
+.shu-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 0}
+.shu-opt{background:rgba(91,140,90,0.06)!important;border:2px solid #5b8c5a;padding:12px 6px;text-align:center;cursor:pointer;font-size:14px;font-weight:900;color:#2a5a2a!important;transition:all 0.2s;letter-spacing:1px;border-radius:4px;box-shadow:0 3px 0 rgba(91,140,90,0.25),0 2px 6px rgba(0,0,0,0.08);font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif}
+.shu-opt:hover{background:rgba(91,140,90,0.15)!important;border-color:#3e6b3e;box-shadow:0 3px 0 rgba(62,107,62,0.3),0 3px 10px rgba(0,0,0,0.12)}
+.shu-opt:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(91,140,90,0.25),0 1px 3px rgba(0,0,0,0.08)}
+.shu-term{text-align:center;padding:12px 0;border-top:2px solid rgba(91,140,90,0.15);background:rgba(91,140,90,0.04)!important}
+.shu-term-m{font-size:13px;font-weight:900;color:#2a5a2a!important;letter-spacing:4px;font-style:italic;font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif}
+.shu-term-s{font-size:10px;color:#3e6b3e!important;letter-spacing:2px;margin-top:2px;font-weight:700;font-style:italic}
+.shu-btm{display:flex;align-items:center;justify-content:center;padding:8px 16px 10px;gap:8px}
+.shu-btm img{height:22px;opacity:0.65}
+.shu-btm .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(91,140,90,0.3),transparent)}</style><div class="shu-sb" onclick="event.stopPropagation()"><div class="shu-top"><div class="ln"></div><img src="https://i.postimg.cc/wjRNGh1N/image.png"><img src="https://i.postimg.cc/rpSr8MGv/image.png"><img src="https://i.postimg.cc/PxT8J92L/image.png"><img src="https://i.postimg.cc/brvDHbXf/image.png"><img src="https://i.postimg.cc/bY62Y6bY/image.png"><div class="ln"></div></div><div class="shu-hd"><div class="shu-hd-l"><div class="shu-name">$2</div></div><div class="shu-hd-r"><div class="shu-time">$3</div><div class="shu-round">轮数 #$1</div></div></div><div class="shu-ct"><div class="shu-sec"><div class="shu-stitle"><img class="ic" src="https://i.postimg.cc/vZ0K0w6D/image.png">状态</div><div class="shu-grid"><div class="shu-row"><span class="lb">情绪</span><span class="vl">$4</span></div><div class="shu-row"><span class="lb">天气</span><span class="vl">$7</span></div></div><div class="shu-thought">$5</div></div><div class="shu-sec"><div class="shu-stitle"><img class="ic" src="https://i.postimg.cc/vZ0K0w6D/image.png">关系</div><div class="shu-bar-w"><span class="shu-bar-lb">好感</span><div class="shu-bar"><div class="shu-bar-f gold" style="width:$8%"></div></div><span class="shu-bar-v">$8</span></div><div class="shu-bar-w"><span class="shu-bar-lb">信任</span><div class="shu-bar"><div class="shu-bar-f green" style="width:$10%"></div></div><span class="shu-bar-v">$10</span></div></div><div class="shu-sec"><div class="shu-stitle"><img class="ic" src="https://i.postimg.cc/vZ0K0w6D/image.png">体征</div><div class="shu-grid"><div class="shu-row"><span class="lb">嘴唇</span><span class="vl">$11</span></div><div class="shu-row"><span class="lb">口腔</span><span class="vl">$12</span></div><div class="shu-row"><span class="lb">乳尖</span><span class="vl">$13</span></div><div class="shu-row"><span class="lb">穴口</span><span class="vl">$14</span></div><div class="shu-row"><span class="lb">足部</span><span class="vl">$15</span></div><div class="shu-row"><span class="lb">小腹</span><span class="vl">$16</span></div></div></div><div class="shu-sec"><div class="shu-stitle"><img class="ic" src="https://i.postimg.cc/vZ0K0w6D/image.png">动态</div><div class="shu-grid"><div class="shu-row"><span class="lb">目光</span><span class="vl">$18</span></div><div class="shu-row"><span class="lb">姿势</span><span class="vl">$19</span></div></div><div class="shu-thought">$17</div></div><div class="shu-sec"><div class="shu-stitle"><img class="ic" src="https://i.postimg.cc/vZ0K0w6D/image.png">外观</div><div class="shu-outfit"><span class="shu-outfit-tag active">常服</span><span class="shu-outfit-tag">春日宴</span></div><div class="shu-row"><span class="lb">服装</span><span class="vl">$21</span></div></div><div class="shu-loc"><img class="loc-ic" src="https://i.postimg.cc/0246qbSd/image.png"><span>$6</span></div><div class="shu-opts"><div class="shu-opt" onclick="event.stopPropagation();var t=document.querySelector('textarea');if(t){t.value='$24';t.dispatchEvent(new Event('input',{bubbles:true}))}">$23</div><div class="shu-opt" onclick="event.stopPropagation();var t=document.querySelector('textarea');if(t){t.value='$26';t.dispatchEvent(new Event('input',{bubbles:true}))}">$25</div><div class="shu-opt" onclick="event.stopPropagation();var t=document.querySelector('textarea');if(t){t.value='$28';t.dispatchEvent(new Event('input',{bubbles:true}))}">$27</div></div></div><div class="shu-term"><div class="shu-term-m">RHODES ISLAND TERMINAL</div><div class="shu-term-s">INTEGRATED TACTICAL LOGISTICS SYSTEM v3.7.1</div></div><div class="shu-btm"><div class="ln"></div><img src="https://i.postimg.cc/wjRNGh1N/image.png"><img src="https://i.postimg.cc/rpSr8MGv/image.png"><img src="https://i.postimg.cc/PxT8J92L/image.png"><img src="https://i.postimg.cc/brvDHbXf/image.png"><img src="https://i.postimg.cc/bY62Y6bY/image.png"><div class="ln"></div></div></div>
