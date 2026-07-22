@@ -1,28 +1,5 @@
-# 大文件排除
-.openclaw/tmp/mimoclaw-backup/
-.openclaw/tmp/nexus-free/
-.openclaw/tmp/limelight/
-.openclaw/tmp/nexus-free-v0.2.0.patch
-.openclaw/tmp/extract_psb.py
-.openclaw/workspace-state.json
-nexus-free-v0.2.0.tar.gz
-
-# 图片排除（保留avatar）
-.openclaw/tmp/*.png
-.openclaw/tmp/*.jpg
-.openclaw/tmp/*.mp4
-.openclaw/tmp/*.apk
-.openclaw/tmp/*.zip
-.openclaw/tmp/*.docx
-.openclaw/tmp/*.pdf
-
-# PPT元素（大图片）
-黍-角色卡项目/黍-美化代码/PPT元素/
-.openclaw/tmp/
-europe-audiobook/
-voice-clones/
-.openclaw/github-token.txt
-.openclaw/mimo-key.txt
-.github-token
-node_modules/
+﻿# 凭据（敏感）
 .openclaw/credentials/
+
+# node
+node_modules/
