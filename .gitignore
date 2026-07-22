@@ -1,5 +1,7 @@
 ﻿# 凭据（敏感）
 .openclaw/credentials/
+.openclaw/tmp/github_key.txt
+.openclaw/tmp/mimo_key.txt
 
 # node
 node_modules/
