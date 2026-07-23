@@ -19,6 +19,11 @@ taste-brandkit, taste-brutalist-skill, taste-design-taste-frontend
 ### 网络代理 Skill（1个）
 proxy-cn — 智能代理脚本，自动匹配 github/npm/pypi 等域名注入代理
 
+### 设计 Skill（3个）
+huashu-design — Claude Design 逆向，一句话生成 PPT/网站/原型/动画（GitHub 20k+ stars）
+llm-wiki — Karpathy LLM Wiki 方法论，自动构建知识库（GitHub 2.2k stars）
+skillopt — 微软 SkillOpt，把 skill 当神经网络训练优化（pip install skillopt）
+
 ### Skills 恢复脚本
 `bash install-skills.sh` — 一键安装 Pocock(26) + Kowalski(6) + Taste(3) = 35个
 
