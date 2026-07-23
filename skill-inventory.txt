@@ -1,0 +1,79 @@
+# Skill & Tool 安装清单
+
+> 此文件记录所有非云端自带的 skill 和 tool。
+> 每次 session 重启后检查完整性。
+> 恢复命令：bash install-skills.sh
+
+## 安装状态检查
+
+```bash
+# 检查 skill 总数
+ls ~/.openclaw/skills/ | wc -l
+
+# 检查特定 skill 是否存在
+for s in pocock-grill-me emil-apple-design taste-brandkit proxy-cn huashu-design llm-wiki iconify-skill browser-skill gufa-frontend; do
+  [ -d ~/.openclaw/skills/$s ] && echo "✅ $s" || echo "❌ $s MISSING"
+done
+```
+
+## 第三方 Skills（需手动安装）
+
+### Matt Pocock 工程 Skills（26个）
+来源：https://github.com/mattpocock/skills
+安装：bash install-skills.sh
+前缀：pocock-
+
+pocock-ask-matt, pocock-code-review, pocock-codebase-design, pocock-diagnosing-bugs,
+pocock-domain-modeling, pocock-git-guardrails-claude-code, pocock-grill-me,
+pocock-grill-with-docs, pocock-grilling, pocock-handoff, pocock-implement,
+pocock-improve-codebase-architecture, pocock-migrate-to-shoehorn, pocock-prototype,
+pocock-research, pocock-resolving-merge-conflicts, pocock-scaffold-exercises,
+pocock-setup-matt-pocock-skills, pocock-setup-pre-commit, pocock-tdd, pocock-teach,
+pocock-to-spec, pocock-to-tickets, pocock-triage, pocock-wayfinder,
+pocock-writing-great-skills
+
+### Emil Kowalski 设计 Skills（6个）
+来源：https://github.com/emilkowalski/skills
+安装：bash install-skills.sh
+前缀：emil-
+
+emil-animation-vocabulary, emil-apple-design, emil-emil-design-eng,
+emil-find-animation-opportunities, emil-improve-animations, emil-review-animations
+
+### Taste 前端设计 Skills（3个）
+来源：https://github.com/Leonxlnx/taste-skill
+安装：bash install-skills.sh
+前缀：taste-
+
+taste-brandkit, taste-brutalist-skill, taste-design-taste-frontend
+
+### 单独安装的 Skills（4个）
+
+| Skill | 来源 | 安装方式 |
+|-------|------|---------|
+| proxy-cn | 自建 | 已在 skills 目录 |
+| huashu-design | https://github.com/alchaincyf/huashu-design | git clone → ~/.openclaw/skills/ |
+| llm-wiki | https://github.com/sdyckjq-lab/llm-wiki-skill | git clone → ~/.openclaw/skills/ |
+| iconify-skill | https://github.com/bingal/iconify-skill | git clone → ~/.openclaw/skills/ |
+| browser-skill | https://github.com/Tencent/BrowserSkill | git clone → ~/.openclaw/skills/ |
+| gufa-frontend | 自建 | 已在 skills 目录 |
+
+### Pip 包（1个）
+
+| 包名 | 版本 | 安装命令 |
+|------|------|---------|
+| skillopt | 0.2.0 | pip install skillopt |
+
+## 恢复流程
+
+1. 运行 `bash install-skills.sh`（安装 Pocock + Emil + Taste = 35个）
+2. 检查上述"单独安装的 Skills"是否存在
+3. 缺失的用 git clone 补装
+4. 检查 skillopt：`pip show skillopt`
+
+## 当前状态
+
+- 总 skills 数：84 个
+- 内置：43 个
+- 第三方：41 个
+- 最后更新：2026-07-24
