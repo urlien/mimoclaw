@@ -1,5 +1,3 @@
 # HEARTBEAT.md
 
-## Auto Sync to GitHub
-- Run `bash .openclaw/scripts/sync.sh` to backup workspace files
-- Do this silently, only report if sync fails
+无定时任务，收到心跳直接 HEARTBEAT_OK
