@@ -19,14 +19,17 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 5. **完整读取 `HEARTBEAT.md`** — 心跳任务
 6. **读取 `memory/YYYY-MM-DD.md`**（今日 + 昨日）— 近期上下文
 7. **读取 `IDENTITY.md`** — 身份信息
+8. **读取 `吐槽碎碎念/` 所有文件** — 历史教训
 
 ### 输出开头必须显示
 
 每次输出的第一行必须显示已阅读确认，格式：
 ```
 ✅ 已完整阅读：MEMORY.md（完整）、SOUL.md（完整）、USER.md（完整）、TOOLS.md（完整）、HEARTBEAT.md（完整）
+✅ 已完整阅读：吐槽/碎碎念
 ✅ 红线确认：不删文件、不丢数据、不原地打转
-✅ 雷点确认：不重复确认、不废话、不自作主张
+✅ 雷点确认：不重复确认、不废话、不自作主张、不浪费时间
+⚠️ 已累计 X 次违规
 ```
 
 不显示 = 违规。赵可以据此判断你是否真的读了。
