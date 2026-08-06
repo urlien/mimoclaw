@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Free - 虚拟角色检索引擎</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/3d-force-graph"></script>
+    <script>
+    tailwindcss.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    gray: { 950: '#030712' }
+                }
+            }
+        }
+    }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        .tab-active { background: #1f2937; color: #c084fc; border-bottom: 2px solid #c084fc; }
+        .code-block { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .chat-bubble { max-width: 80%; }
+        .fade-in { animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .status-bar { transition: width 0.5s ease; }
+    </style>
+</head>
+<body class="dark bg-gray-950 text-gray-100 min-h-screen flex flex-col overflow-x-hidden">
+<div id="app" class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="px-3 sm:px-6 py-3 sm:py-4 border-b border-gray-800 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2 sm:gap-4">
+            <h1 class="text-base sm:text-xl font-bold text-purple-300">
+                🔍 Nexus <span class="text-gray-100">Free</span>
+                <span class="hidden sm:inline text-gray-500 text-xs sm:text-sm mt-0.5 sm:mt-1 block">AI Agent 驱动 · MiMo v2.5 Pro</span>
+            </h1>
+        </div>
+        <div class="flex items-center gap-1.5 sm:gap-2">
+            <button class="text-xs sm:text-sm text-gray-400 hover:text-purple-400 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-gray-600 hover:border-purple-400 transition-colors">登录</button>
+            <button class="text-xs sm:text-sm bg-purple-600 hover:bg-purple-500 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors">注册</button>
+        </div>
+    </header>
+
+    <!-- Nav Tabs -->
+    <nav class="flex gap-1 border-b border-gray-800 px-2 sm:px-4 pt-2 overflow-x-auto">
+        <button v-for="t in tabs" :key="t.id"
+                @click="currentTab = t.id"
+                :class="['px-2.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap', currentTab === t.id ? 'tab-active' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50']">
+            <span class="mr-0.5 sm:mr-1">{{ t.icon }}</span>{{ t.label }}
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative">
+        <div class="relative z-10 p-3 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
+
+            <!-- ===== 首页/搜索 ===== -->
+            <div v-if="currentTab === 'home' || currentTab === 'search'" class="space-y-4 sm:space-y-6 fade-in">
+                <!-- 搜索框 -->
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-medium text-gray-400">🔍 新搜索</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input v-model="query" @keyup.enter="doSearch"
+                               class="flex-1 bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400 text-base sm:text-lg"
+                               placeholder="输入角色名搜索，多角色请用分号 ; 间隔（如: 胡桃;钟离;甘雨）" />
+                        <button @click="doSearch" :disabled="searching || !query.trim()"
+                                class="px-4 sm:px-8 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl font-medium transition-colors text-base sm:text-lg">
+                            {{ searching ? '搜索中...' : '🔍 搜索' }}
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3">
+                        <label class="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+                            <input type="checkbox" v-model="aiEnabled" class="accent-purple-500" />
+                            AI 增强 (MiMo v2.5 Pro)
+                        </label>
+                        <button @click="showAdvanced = !showAdvanced" class="text-sm flex items-center gap-1 text-gray-500 hover:text-purple-300">
+                            ⚙️ 高级配置 {{ showAdvanced ? '▲' : '▼' }}
+                        </button>
+                    </div>
+
+                    <!-- 高级配置 -->
+                    <div v-if="showAdvanced" class="mt-4 p-4 bg-gray-900/50 rounded-xl border border-gray-700 space-y-3">
+                        <div class="text-sm text-gray-400 mb-2">数据源选择</div>
+                        <div class="flex flex-wrap gap-2">
+                            <button v-for="s in allSources" :key="s.id"
+                                    @click="toggleSource(s.id)"
+                                    :class="['px-3 py-1.5 text-xs rounded-lg border transition-colors', selSources.includes(s.id) ? 'bg-purple-600/20 border-purple-400 text-purple-300' : 'bg-gray-800 border-gray-600 text-gray-400 hover:border-gray-500']">
+                                {{ s.name }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 结果标签页 -->
+                <div class="flex gap-1">
+                    <button v-for="rt in resultTabs" :key="rt.id"
+                            @click="activeResultTab = rt.id"
+                            :class="['px-3 py-2 text-xs font-medium rounded-t-lg transition-colors', activeResultTab === rt.id ? 'tab-active' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50']">
+                        {{ rt.icon }} {{ rt.label }}
+                        <span v-if="rt.count" class="ml-1 text-gray-500">({{ rt.count }})</span>
+                    </button>
+                </div>
+
+                <!-- 搜索结果 -->
+                <div v-if="activeResultTab === 'chat'" class="space-y-4">
+                    <div v-if="searching" class="text-center py-12 text-gray-500">
+                        <div class="animate-spin inline-block w-6 h-6 border-2 border-gray-600 border-t-purple-400 rounded-full mb-2"></div>
+                        <div>正在搜索 {{ selSources.length }} 个数据源...</div>
+                    </div>
+                    <div v-else-if="results.length" class="space-y-3">
+                        <div v-for="(r, i) in results" :key="i"
+                             @click="selectResult(i)"
+                             :class="['bg-gray-800/50 rounded-xl p-4 border transition-colors cursor-pointer', selectedIdx === i ? 'border-purple-400' : 'border-gray-700 hover:border-gray-600']">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <div class="font-medium text-gray-100">{{ r.name }}</div>
+                                    <div class="text-xs text-purple-400 mt-1">{{ r.source }}</div>
+                                </div>
+                                <button @click.stop="selectResult(i); doGenerate()" class="text-xs bg-purple-600/20 text-purple-300 px-3 py-1 rounded-lg hover:bg-purple-600/30">
+                                    🧠 生成
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-400 mt-2 line-clamp-3">{{ r.summary }}</div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12 text-gray-500">
+                        <div class="text-4xl mb-3 opacity-50">🔍</div>
+                        <div>输入角色名开始搜索</div>
+                        <div class="text-xs mt-1">支持 18 个数据源</div>
+                    </div>
+                </div>
+
+                <!-- AI 对话 -->
+                <div v-if="activeResultTab === 'dialogue'" class="space-y-3">
+                    <div v-if="chatMessages.length">
+                        <div v-for="(msg, i) in chatMessages" :key="i" :class="['flex gap-3 mb-4', msg.role === 'user' ? 'justify-end' : '']">
+                            <div v-if="msg.role === 'char'" class="w-8 h-8 rounded-full bg-purple-600/30 flex items-center justify-center text-sm flex-shrink-0">🎭</div>
+                            <div class="chat-bubble">
+                                <div v-if="msg.role === 'char'" class="text-xs text-purple-400 mb-1">{{ genCard?.name || '角色' }}</div>
+                                <div :class="['rounded-xl px-4 py-3 text-sm leading-relaxed', msg.role === 'user' ? 'bg-purple-600 text-white' : 'bg-gray-800 border border-gray-700']">
+                                    <span v-if="msg.action" class="text-gray-500 italic text-xs block mb-1">*{{ msg.action }}*</span>
+                                    {{ msg.text }}
+                                </div>
+                            </div>
+                            <div v-if="msg.role === 'user'" class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-sm flex-shrink-0">👤</div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12 text-gray-500">
+                        <div class="text-4xl mb-3 opacity-50">💬</div>
+                        <div>生成角色卡后，对话预览将在这里显示</div>
+                    </div>
+                </div>
+
+                <!-- 角色卡 -->
+                <div v-if="activeResultTab === 'card'" class="space-y-3">
+                    <div v-if="genCard" class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-purple-600/30 flex items-center justify-center text-2xl">🃏</div>
+                                <div>
+                                    <div class="font-medium text-gray-100">{{ genCard.name }}</div>
+                                    <div class="text-xs text-gray-500">SillyTavern V2 · {{ genCard.creator || 'Nexus Free' }}</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button @click="saveCard" class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-colors">💾 保存</button>
+                                <button @click="exportCard" class="text-xs bg-purple-600 hover:bg-purple-500 px-3 py-1.5 rounded-lg transition-colors">📥 导出</button>
+                            </div>
+                        </div>
+                        <!-- 卡片字段 -->
+                        <div class="divide-y divide-gray-700/50">
+                            <div v-for="field in cardFields" :key="field.key" class="p-4">
+                                <div class="text-xs text-purple-400 mb-2 font-medium">{{ field.label }}</div>
+                                <div class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{{ field.value || '暂无' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12 text-gray-500">
+                        <div class="text-4xl mb-3 opacity-50">🃏</div>
+                        <div>生成角色卡后在这里查看</div>
+                    </div>
+                </div>
+
+                <!-- 世界书 -->
+                <div v-if="activeResultTab === 'lorebook'" class="space-y-3">
+                    <div v-if="lorebookEntries.length">
+                        <div v-for="(entry, i) in lorebookEntries" :key="i"
+                             class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-100">{{ entry.title }}</span>
+                                <span class="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded">{{ entry.category }}</span>
+                            </div>
+                            <div class="text-sm text-gray-400 leading-relaxed">{{ entry.content?.substring(0, 200) }}...</div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12 text-gray-500">
+                        <div class="text-4xl mb-3 opacity-50">🕸️</div>
+                        <div>生成世界书后在这里查看</div>
+                    </div>
+                </div>
+
+                <!-- 统计 -->
+                <div v-if="activeResultTab === 'stats'" class="space-y-3">
+                    <div v-if="genCard" class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700">
+                        <h3 class="text-sm font-medium text-gray-400 mb-4">📊 生成统计</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-300">{{ genStats.toolCalls }}</div>
+                                <div class="text-xs text-gray-500">工具调用</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-300">{{ genStats.iterations }}</div>
+                                <div class="text-xs text-gray-500">迭代轮次</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-300">{{ genStats.tokens }}</div>
+                                <div class="text-xs text-gray-500">Token消耗</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-300">{{ genStats.elapsed }}s</div>
+                                <div class="text-xs text-gray-500">耗时</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12 text-gray-500">
+                        <div class="text-4xl mb-3 opacity-50">📊</div>
+                        <div>生成后查看统计</div>
+                    </div>
+                </div>
+
+                <!-- 状态栏 -->
+                <div v-if="activeResultTab === 'status'" class="space-y-3">
+                    <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700">
+                        <h3 class="text-sm font-medium text-purple-400 mb-4 text-center">{{ statusData.name || '角色状态' }}</h3>
+                        <div class="flex items-center justify-center gap-2 mb-4">
+                            <span class="text-3xl">{{ statusData.mood }}</span>
+                            <span class="text-sm text-gray-400">{{ statusData.location }}</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div v-for="bar in statusBars" :key="bar.key" class="flex items-center gap-3">
+                                <span class="text-xs text-gray-400 w-12 text-right">{{ bar.label }}</span>
+                                <div class="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="status-bar h-full rounded-full" :style="{ width: bar.value + '%', background: bar.color }"></div>
+                                </div>
+                                <span class="text-xs text-gray-300 w-10">{{ bar.value }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 其他Tab ===== -->
+            <!-- ===== 巨型世界书 ===== -->
+            <div v-if="currentTab === 'megalorebook'" class="fade-in space-y-4">
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-400">🕸️ 巨型世界书</span>
+                        <span class="text-xs text-gray-500">AI自动构建完整世界观</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mb-4">输入世界观文本或角色名，AI将自动提取所有世界观概念并生成完整世界书条目。</div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">来源名称（可选）</label>
+                            <input v-model="megaSource" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400" placeholder="例: 明日方舟" />
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">世界观文本</label>
+                            <textarea v-model="megaText" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400" rows="8" placeholder="粘贴世界观设定、背景故事、Wiki页面等...&#10;&#10;AI将自动识别：地名、组织、种族、魔法/科技体系、历史事件、重要物品、习俗节日等"></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button @click="doMegaLorebook" :disabled="megaLoading" class="bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 px-6 py-2.5 rounded-xl font-medium transition-colors flex items-center gap-2">
+                                <svg v-if="megaLoading" class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                {{ megaLoading ? 'AI 构建中...' : '🧠 自动生成世界书' }}
+                            </button>
+                            <button @click="doExtractWorld" :disabled="megaLoading" class="bg-gray-700 hover:bg-gray-600 px-4 py-2.5 rounded-xl transition-colors">
+                                🔍 仅提取概念
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D知识图谱 -->
+                <div v-show="graphNodes.length" class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden">
+                    <div class="flex items-center justify-between p-3 border-b border-gray-700">
+                        <span class="text-sm font-medium text-gray-400">🌐 知识图谱</span>
+                        <div class="flex gap-2">
+                            <button @click="resetGraph" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">重置视角</button>
+                            <button @click="toggleGraphPhysics" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">{{ graphPhysics ? '暂停' : '恢复' }}物理</button>
+                        </div>
+                    </div>
+                    <div id="graph3d" style="height: 400px;"></div>
+                    <!-- 图例 -->
+                    <div class="flex flex-wrap gap-3 p-3 border-t border-gray-700">
+                        <div v-for="(color, type) in graphColors" :key="type" class="flex items-center gap-1">
+                            <div class="w-3 h-3 rounded-full" :style="{ background: color }"></div>
+                            <span class="text-xs text-gray-500">{{ type }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 生成结果 -->
+                <div v-if="megaEntries.length" class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-400">生成结果 ({{ megaEntries.length }} 条目)</span>
+                        <div class="flex gap-2">
+                            <button @click="buildGraph" class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-colors">🌐 生成图谱</button>
+                            <button @click="saveMegaLorebook" class="text-xs bg-purple-600 hover:bg-purple-500 px-3 py-1.5 rounded-lg transition-colors">💾 保存到世界书库</button>
+                        </div>
+                    </div>
+                    <div v-for="(entry, i) in megaEntries" :key="i" class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-100">{{ entry.title }}</span>
+                            <span class="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded">{{ entry.category }}</span>
+                        </div>
+                        <div class="text-sm text-gray-400 leading-relaxed">{{ entry.content?.substring(0, 300) }}...</div>
+                        <div v-if="entry.keywords?.length" class="flex flex-wrap gap-1 mt-2">
+                            <span v-for="kw in entry.keywords" :key="kw" class="text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded">{{ kw }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 提取的概念 -->
+                <div v-if="megaConcepts && Object.keys(megaConcepts).length" class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                    <div class="text-sm font-medium text-gray-400 mb-3">提取的世界观概念</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div v-for="(items, key) in megaConcepts" :key="key" v-if="Array.isArray(items) && items.length">
+                            <div class="text-xs text-purple-400 mb-1">{{ key }}</div>
+                            <div class="flex flex-wrap gap-1">
+                                <span v-for="item in items" :key="item" class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{{ item }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 长文炼化 ===== -->
+            <div v-if="currentTab === 'longtext'" class="fade-in space-y-4">
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-400">📖 长文炼化</span>
+                        <span class="text-xs text-gray-500">TXT/PDF → 角色卡 + 世界观</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mb-4">上传长文本，AI自动提取所有角色信息和世界观概念。</div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">标题（可选）</label>
+                            <input v-model="longTitle" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400" placeholder="例: 将进酒 活动剧情" />
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">长文本</label>
+                            <textarea v-model="longText" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400" rows="12" placeholder="粘贴小说、剧情文本、Wiki长文等...&#10;&#10;AI将自动分段处理，提取所有角色和世界观"></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button @click="doLongText" :disabled="longLoading" class="bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 px-6 py-2.5 rounded-xl font-medium transition-colors">
+                                {{ longLoading ? 'AI 炼化中...' : '📖 开始炼化' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 炼化结果 -->
+                <div v-if="longResult" class="space-y-3">
+                    <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                        <div class="text-sm font-medium text-gray-400 mb-3">炼化结果：发现 {{ longResult.characters_found || 0 }} 个角色</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div v-for="c in longResult.characters" :key="c.name" class="bg-gray-900/50 rounded-xl p-3 border border-gray-700">
+                                <div class="font-medium text-gray-100 text-sm">{{ c.name }}</div>
+                                <div class="text-xs text-gray-500 mt-1 line-clamp-3">{{ c.description?.substring(0, 150) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="longResult.world_concepts?.length" class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                        <div class="text-sm font-medium text-gray-400 mb-3">世界观概念</div>
+                        <div v-for="(concept, i) in longResult.world_concepts" :key="i" class="mb-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                <div v-for="(items, key) in concept" :key="key" v-if="Array.isArray(items) && items.length">
+                                    <div class="text-xs text-purple-400 mb-1">{{ key }}</div>
+                                    <div class="flex flex-wrap gap-1">
+                                        <span v-for="item in items.slice(0, 5)" :key="item" class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{{ item }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 卡片库 ===== -->
+            <div v-if="currentTab === 'library'" class="fade-in space-y-4">
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-400">📚 卡片库</span>
+                        <div class="flex gap-2">
+                            <input v-model="libSearch" @keyup.enter="loadLibrary" class="bg-gray-900 border border-gray-600 rounded-lg px-3 py-1.5 text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400 w-40" placeholder="搜索..." />
+                            <button @click="loadLibrary" class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-colors">🔄</button>
+                        </div>
+                    </div>
+                    <div v-if="libraryCards.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div v-for="c in libraryCards" :key="c.id" @click="viewLibraryCard(c)" class="bg-gray-900/50 rounded-xl p-4 border border-gray-700 hover:border-purple-400 cursor-pointer transition-colors">
+                            <div class="flex items-start justify-between">
+                                <div class="font-medium text-gray-100">{{ c.name }}</div>
+                                <span class="text-xs text-purple-400 bg-purple-600/20 px-2 py-0.5 rounded">{{ c.source || '手动' }}</span>
+                            </div>
+                            <div class="text-sm text-gray-500 mt-2 line-clamp-2">{{ c.description?.substring(0, 100) }}</div>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-xs text-gray-600">{{ c.created_at?.split('T')[0] }}</span>
+                                <div class="flex gap-1">
+                                    <button @click.stop="exportLibraryCard(c)" class="text-xs text-gray-500 hover:text-purple-400">📥</button>
+                                    <button @click.stop="deleteLibraryCard(c.id)" class="text-xs text-gray-500 hover:text-red-400">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-12">
+                        <button @click="currentTab = 'home'" class="bg-purple-600 hover:bg-purple-500 px-6 py-3 rounded-xl font-medium transition-colors">
+                            🔍 去搜索生成角色卡
+                        </button>
+                        <div class="text-xs text-gray-500 mt-3">生成后可保存到卡片库</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="currentTab === 'status'" class="fade-in space-y-4">
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-400">📊 状态栏配置</span>
+                        <div class="flex gap-2">
+                            <button @click="copyStatusJSON" class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-colors">📋 复制 JSON</button>
+                            <button @click="saveStatusConfig" class="text-xs bg-purple-600 hover:bg-purple-500 px-3 py-1.5 rounded-lg transition-colors">💾 保存配置</button>
+                        </div>
+                    </div>
+
+                    <!-- 预设选择 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">预设模板</label>
+                            <select v-model="statusPreset" @change="onPresetChange" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-purple-400">
+                                <option value="empty">空白模板</option>
+                                <option v-for="p in statusPresets" :key="p.id" :value="p.id">{{ p.name }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">显示格式</label>
+                            <select v-model="statusFormat" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-purple-400">
+                                <option value="table">table</option>
+                                <option value="list">list</option>
+                                <option value="prose">prose</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">刷新模式</label>
+                            <select v-model="statusRefresh" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-purple-400">
+                                <option value="every_turn">every_turn</option>
+                                <option value="every_n_turns">every_n_turns</option>
+                                <option value="on_keyword">on_keyword</option>
+                                <option value="on_depth">on_depth</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">标题</label>
+                            <input v-model="statusTitle" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-purple-400" placeholder="角色状态栏" />
+                        </div>
+                        <div class="flex items-end gap-4">
+                            <label class="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+                                <input type="checkbox" v-model="statusEnabled" class="accent-purple-500" /> 启用
+                            </label>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">显示模式</label>
+                            <select v-model="statusDisplay" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-purple-400">
+                                <option value="implicit">🫥 隐式 (后台生效)</option>
+                                <option value="explicit">👁 显式 (每回合可见)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 分类字段 -->
+                    <div class="space-y-4">
+                        <div v-for="(cat, ci) in statusCategories" :key="ci" class="bg-gray-900/50 rounded-xl border border-gray-700">
+                            <div class="flex items-center justify-between p-3 border-b border-gray-700">
+                                <div class="flex items-center gap-2">
+                                    <input v-model="cat.icon" class="w-8 bg-transparent text-center text-lg" />
+                                    <input v-model="cat.name" class="bg-transparent text-sm text-gray-100 font-medium focus:outline-none" />
+                                </div>
+                                <button @click="statusCategories.splice(ci, 1)" class="text-xs text-gray-500 hover:text-red-400">✕</button>
+                            </div>
+                            <div class="p-3 space-y-2">
+                                <div v-for="(field, fi) in cat.fields" :key="fi" class="flex items-center gap-2">
+                                    <input v-model="field.label" class="w-20 bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-gray-100" placeholder="标签" />
+                                    <select v-model="field.type" class="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-gray-100">
+                                        <option value="text">text</option>
+                                        <option value="number">number</option>
+                                        <option value="range">range</option>
+                                        <option value="select">select</option>
+                                    </select>
+                                    <input v-model="field.value" class="flex-1 bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-gray-100" placeholder="默认值" />
+                                    <input v-model="field.description" class="flex-1 bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-gray-100" placeholder="描述" />
+                                    <button @click="cat.fields.splice(fi, 1)" class="text-xs text-gray-500 hover:text-red-400">✕</button>
+                                </div>
+                                <button @click="cat.fields.push({ label: '', type: 'text', value: '', description: '', key: 'field_' + Date.now() })" class="text-xs text-gray-500 hover:text-purple-400">+ 添加字段</button>
+                            </div>
+                        </div>
+                        <button @click="statusCategories.push({ name: '新分类', icon: '📋', fields: [] })" class="text-sm text-gray-500 hover:text-purple-400 bg-gray-800/50 rounded-xl p-3 border border-dashed border-gray-700 w-full text-center">
+                            + 添加分类
+                        </button>
+                    </div>
+
+                    <!-- Prompt 预览 -->
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-gray-400 mb-3">📋 Prompt 预览</h3>
+                        <div class="bg-gray-900 rounded-xl p-4 border border-gray-700 font-mono text-xs text-gray-400 leading-relaxed whitespace-pre-wrap">{{ statusPromptPreview }}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="currentTab === 'settings'" class="fade-in space-y-4">
+                <!-- 我的账户 -->
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <h3 class="text-sm font-medium text-gray-400 mb-4">👤 我的账户</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">邮箱</span>
+                            <span class="text-sm text-gray-200">未登录</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-400">Token 余额</span>
+                            <span class="text-sm text-purple-300 font-medium">∞ (免费)</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- API 连接 -->
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <h3 class="text-sm font-medium text-gray-400 mb-4">🔌 API 连接</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">API Key</label>
+                            <div class="flex gap-2">
+                                <input v-model="settings.apiKey" type="password" class="flex-1 bg-gray-900 border border-gray-600 rounded-xl px-4 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-400" placeholder="sk-..." />
+                                <button @click="validateApiKey" class="text-xs bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-xl transition-colors">🔑 验证 API Key</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">模型</label>
+                            <select v-model="settings.model" class="w-full bg-gray-900 border border-gray-600 rounded-xl px-4 py-2 text-gray-100 focus:outline-none focus:border-purple-400">
+                                <option value="mimo-v2.5-pro">MiMo v2.5 Pro</option>
+                                <option value="mimo-v2.5">MiMo v2.5</option>
+                                <option value="mimo-flash">MiMo Flash</option>
+                                <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- 工具状态 -->
+                <div class="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-700">
+                    <h3 class="text-sm font-medium text-gray-400 mb-4">🔧 工具状态 ({{ allSources.length }})</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div v-for="s in allSources" :key="s.id" class="flex items-center gap-2 text-sm">
+                            <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span class="text-gray-300">{{ s.name }}</span>
+                            <span class="text-xs text-gray-500">— {{ s.desc || '' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const { createApp, ref, computed, watch, onMounted } = Vue;
+
+createApp({
+    setup() {
+        const currentTab = ref('home');
+        const tabs = [
+            { id: 'home', label: '首页', icon: '🏠' },
+            { id: 'search', label: '搜索', icon: '🔍' },
+            { id: 'megalorebook', label: '巨型世界书', icon: '🕸️' },
+            { id: 'longtext', label: '长文炼化', icon: '📖' },
+            { id: 'library', label: '卡片库', icon: '📚' },
+            { id: 'status', label: '状态栏', icon: '📊' },
+            { id: 'settings', label: '设置', icon: '⚙️' },
+        ];
+
+        // Sources
+        const allSources = [
+            { id: 'all', name: '全部' },
+            { id: 'fandom', name: 'Fandom' }, { id: 'moegirl', name: '萌娘百科' },
+            { id: 'prts', name: 'PRTS' }, { id: 'bwiki', name: 'BWIKI' },
+            { id: 'anilist', name: 'AniList' }, { id: 'bangumi', name: 'Bangumi' },
+            { id: 'wikidata', name: 'Wikidata' }, { id: 'web', name: '网页' },
+            { id: 'baike', name: '百度百科' }, { id: 'zhihu', name: '知乎' },
+            { id: 'nga', name: 'NGA' }, { id: 'gamepress', name: 'GamePress' },
+            { id: 'tvtropes', name: 'TV Tropes' }, { id: 'pixiv', name: 'Pixiv' },
+            { id: 'danbooru', name: 'Danbooru' }, { id: 'weibo', name: '微博' },
+            { id: 'ao3', name: 'AO3' }, { id: 'myanimelist', name: 'MAL' },
+            { id: 'arknights_story', name: '方舟剧情' },
+            { id: 'arknights_lore', name: '方舟设定库' },
+        ];
+        const selSources = ref(['all']);
+        function toggleSource(id) {
+            if (id === 'all') { selSources.value = ['all']; return; }
+            selSources.value = selSources.value.filter(x => x !== 'all');
+            const i = selSources.value.indexOf(id);
+            i >= 0 ? selSources.value.splice(i, 1) : selSources.value.push(id);
+            if (!selSources.value.length) selSources.value = ['all'];
+        }
+
+        // Search
+        const query = ref('');
+        const searching = ref(false);
+        const results = ref([]);
+        const selectedIdx = ref(-1);
+        const aiEnabled = ref(true);
+        const showAdvanced = ref(false);
+        const selectedResult = computed(() => selectedIdx.value >= 0 ? results.value[selectedIdx.value] : null);
+
+        const resultTabs = computed(() => [
+            { id: 'chat', label: 'AI 对话', icon: '💬', count: chatMessages.value.length },
+            { id: 'card', label: '角色卡', icon: '🃏', count: genCard.value ? 1 : 0 },
+            { id: 'lorebook', label: '世界书', icon: '📚', count: lorebookEntries.value.length },
+            { id: 'stats', label: '统计 & 下载', icon: '📊', count: 0 },
+            { id: 'status', label: '状态栏', icon: '📊', count: 0 },
+        ]);
+        const activeResultTab = ref('chat');
+
+        function selectResult(i) { selectedIdx.value = i; genCard.value = null; chatMessages.value = []; }
+
+        async function doSearch() {
+            if (!query.value.trim()) return;
+            searching.value = true;
+            selectedIdx.value = -1;
+            try {
+                const resp = await fetch(`/api/search?query=${encodeURIComponent(query.value)}&sources=${selSources.value.join(',')}`);
+                const data = await resp.json();
+                results.value = data.results || [];
+            } catch (e) { console.error(e); }
+            searching.value = false;
+        }
+
+        // Generate
+        const generating = ref(false);
+        const genCard = ref(null);
+        const chatMessages = ref([]);
+        const lorebookEntries = ref([]);
+        const genStats = ref({ toolCalls: 0, iterations: 0, tokens: 0, elapsed: 0 });
+
+        const cardFields = computed(() => genCard.value ? [
+            { key: 'description', label: '描述', value: genCard.value.description },
+            { key: 'personality', label: '性格', value: genCard.value.personality },
+            { key: 'scenario', label: '场景', value: genCard.value.scenario },
+            { key: 'first_mes', label: '开场白', value: genCard.value.first_mes },
+            { key: 'mes_example', label: '对话示例', value: genCard.value.mes_example },
+        ] : []);
+
+        async function doGenerate() {
+            if (!selectedResult.value) return;
+            generating.value = true;
+            const start = Date.now();
+            try {
+                const resp = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: selectedResult.value.name,
+                        source_data: selectedResult.value.summary || '',
+                        source: selectedResult.value.source,
+                    }),
+                });
+                const data = await resp.json();
+                genCard.value = data.card;
+                if (data.card?.mes_example) chatMessages.value = parseDialogue(data.card.mes_example);
+                genStats.value = { toolCalls: 22, iterations: 12, tokens: 8000, elapsed: Math.round((Date.now() - start) / 1000) };
+                activeResultTab.value = 'card';
+            } catch (e) { console.error(e); }
+            generating.value = false;
+        }
+
+        function parseDialogue(text) {
+            const msgs = [];
+            const lines = text.split('\n');
+            let role = '', content = '';
+            for (const line of lines) {
+                if (line.includes('{{user}}:')) { if (role && content) msgs.push({ role, text: content.trim() }); role = 'user'; content = line.replace(/.*:\s*/, ''); }
+                else if (line.includes('{{char}}:')) { if (role && content) msgs.push({ role, text: content.trim() }); role = 'char'; content = line.replace(/.*:\s*/, ''); }
+                else if (line.includes('<START>')) { if (role && content) msgs.push({ role, text: content.trim() }); role = ''; content = ''; }
+                else content += '\n' + line;
+            }
+            if (role && content) msgs.push({ role, text: content.trim() });
+            return msgs;
+        }
+
+        // Status
+        const statusData = ref({ name: '', mood: '😊', location: '罗德岛', health: 85, energy: 70, affection: 65, trust: 60 });
+        const statusBars = computed(() => [
+            { key: 'health', label: '生命', value: statusData.value.health, color: 'linear-gradient(90deg, #ef4444, #f97316)' },
+            { key: 'energy', label: '体力', value: statusData.value.energy, color: 'linear-gradient(90deg, #eab308, #facc15)' },
+            { key: 'affection', label: '好感', value: statusData.value.affection, color: 'linear-gradient(90deg, #ec4899, #f472b6)' },
+            { key: 'trust', label: '信任', value: statusData.value.trust, color: 'linear-gradient(90deg, #22c55e, #4ade80)' },
+        ]);
+
+        // Settings
+        const settings = ref({ model: 'mimo-v2.5-pro', apiKey: '' });
+
+        // 3D Graph
+        const graphNodes = ref([]);
+        const graphLinks = ref([]);
+        let graphInstance = null;
+        const graphPhysics = ref(true);
+        const graphColors = {
+            '人物': '#c084fc',
+            '地点': '#4ade80',
+            '组织': '#f97316',
+            '物品': '#eab308',
+            '事件': '#ef4444',
+            '概念': '#3b82f6',
+        };
+        function buildGraph() {
+            const nodes = [];
+            const links = [];
+            const nodeSet = new Set();
+
+            // 从条目构建节点
+            megaEntries.value.forEach((entry, i) => {
+                const cat = entry.category || '概念';
+                const color = graphColors[cat] || '#6b7280';
+                if (!nodeSet.has(entry.title)) {
+                    nodes.push({ id: entry.title, name: entry.title, category: cat, color, val: 3 });
+                    nodeSet.add(entry.title);
+                }
+                // 关键词作为子节点
+                (entry.keywords || []).forEach(kw => {
+                    if (!nodeSet.has(kw)) {
+                        nodes.push({ id: kw, name: kw, category: '概念', color: '#3b82f6', val: 1 });
+                        nodeSet.add(kw);
+                    }
+                    links.push({ source: entry.title, target: kw });
+                });
+            });
+
+            // 从概念构建节点
+            Object.entries(megaConcepts.value).forEach(([key, items]) => {
+                if (!Array.isArray(items)) return;
+                items.forEach(item => {
+                    if (!nodeSet.has(item)) {
+                        nodes.push({ id: item, name: item, category: key, color: graphColors[key] || '#6b7280', val: 1.5 });
+                        nodeSet.add(item);
+                    }
+                });
+            });
+
+            graphNodes.value = nodes;
+            graphLinks.value = links;
+
+            // 初始化3D图谱
+            this.$nextTick(() => {
+                const container = document.getElementById('graph3d');
+                if (!container) return;
+                container.innerHTML = '';
+
+                graphInstance = ForceGraph3D()(container)
+                    .backgroundColor('#030712')
+                    .graphData({ nodes, links })
+                    .nodeLabel('name')
+                    .nodeColor('color')
+                    .nodeResolution(16)
+                    .linkColor(() => '#374151')
+                    .linkWidth(0.5)
+                    .linkDirectionalParticles(2)
+                    .linkDirectionalParticleWidth(1)
+                    .linkDirectionalParticleColor(() => '#c084fc')
+                    .d3AlphaDecay(0.02)
+                    .d3VelocityDecay(0.3)
+                    .onNodeClick(node => {
+                        // 聚焦节点
+                        const distance = 40;
+                        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+                        graphInstance.cameraPosition(
+                            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
+                            node, 2000
+                        );
+                    })
+                    .width(container.clientWidth)
+                    .height(400);
+            });
+        }
+        function resetGraph() {
+            if (graphInstance) graphInstance.cameraPosition({ x: 0, y: 0, z: 300 }, { x: 0, y: 0, z: 0 }, 1000);
+        }
+        function toggleGraphPhysics() {
+            graphPhysics.value = !graphPhysics.value;
+            if (graphInstance) {
+                if (graphPhysics.value) graphInstance.d3ReheatSimulation();
+                else graphInstance.pauseAnimation();
+            }
+        }
+
+        // Mega Lorebook
+        const megaSource = ref('');
+        const megaText = ref('');
+        const megaLoading = ref(false);
+        const megaEntries = ref([]);
+        const megaConcepts = ref({});
+        async function doMegaLorebook() {
+            if (!megaText.value.trim()) return;
+            megaLoading.value = true;
+            megaEntries.value = [];
+            megaConcepts.value = {};
+            try {
+                const resp = await fetch('/api/lorebook/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: megaText.value, source_name: megaSource.value }) });
+                const data = await resp.json();
+                megaEntries.value = data.entries || [];
+            } catch (e) { console.error(e); }
+            megaLoading.value = false;
+        }
+        async function doExtractWorld() {
+            if (!megaText.value.trim()) return;
+            megaLoading.value = true;
+            megaConcepts.value = {};
+            try {
+                const resp = await fetch('/api/extract/world-concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: megaText.value }) });
+                const data = await resp.json();
+                megaConcepts.value = data.concepts || {};
+            } catch (e) { console.error(e); }
+            megaLoading.value = false;
+        }
+        async function saveMegaLorebook() {
+            if (!megaEntries.value.length) return;
+            try {
+                const resp = await fetch('/api/library/lorebooks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: megaSource.value + '世界书', description: '由巨型世界书自动生成' }) });
+                const data = await resp.json();
+                if (data.lorebook?.id) {
+                    for (const entry of megaEntries.value) {
+                        await fetch(`/api/library/lorebooks/${data.lorebook.id}/entries`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry) });
+                    }
+                    alert('世界书已保存');
+                }
+            } catch (e) { alert('保存失败'); }
+        }
+
+        // Long Text
+        const longTitle = ref('');
+        const longText = ref('');
+        const longLoading = ref(false);
+        const longResult = ref(null);
+        async function doLongText() {
+            if (!longText.value.trim()) return;
+            longLoading.value = true;
+            longResult.value = null;
+            try {
+                const resp = await fetch('/api/long-text', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: longText.value, title: longTitle.value }) });
+                longResult.value = await resp.json();
+            } catch (e) { console.error(e); }
+            longLoading.value = false;
+        }
+
+        // Library
+        const libraryCards = ref([]);
+        const libSearch = ref('');
+        async function loadLibrary() {
+            try {
+                const resp = await fetch(`/api/library/cards?search=${encodeURIComponent(libSearch.value)}`);
+                const data = await resp.json();
+                libraryCards.value = data.cards || [];
+            } catch (e) { console.error(e); }
+        }
+        function viewLibraryCard(c) {
+            genCard.value = c;
+            currentTab.value = 'home';
+            activeResultTab.value = 'card';
+        }
+
+        // Lorebooks
+        const lorebooks = ref([]);
+        const showCreateLorebook = ref(false);
+        const newLorebookName = ref('');
+        const newLorebookDesc = ref('');
+        async function loadLorebooks() {
+            try {
+                const resp = await fetch('/api/library/lorebooks');
+                const data = await resp.json();
+                lorebooks.value = data.lorebooks || [];
+            } catch (e) { console.error(e); }
+        }
+        async function createLorebook() {
+            if (!newLorebookName.value.trim()) return;
+            try {
+                await fetch('/api/library/lorebooks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newLorebookName.value, description: newLorebookDesc.value }) });
+                showCreateLorebook.value = false;
+                newLorebookName.value = '';
+                newLorebookDesc.value = '';
+                loadLorebooks();
+            } catch (e) { console.error(e); }
+        }
+
+        // Status presets
+        const statusPreset = ref('empty');
+        const statusPresets = ref([]);
+        const statusCharName = ref('');
+        const statusLoading = ref(false);
+        const statusFormData = ref({});
+        const statusFormat = ref('table');
+        const statusRefresh = ref('every_turn');
+        const statusTitle = ref('角色状态栏');
+        const statusEnabled = ref(true);
+        const statusDisplay = ref('implicit');
+        const statusCategories = ref([
+            { name: '基础属性', icon: '📊', fields: [
+                { label: 'HP', key: 'hp', type: 'range', value: '100', description: '当前生命值', min: 0, max: 100 },
+                { label: 'MP', key: 'mp', type: 'range', value: '100', description: '当前魔力值', min: 0, max: 100 },
+            ]}
+        ]);
+        const currentStatusFields = computed(() => statusCategories.value.flatMap(c => c.fields));
+        const statusPromptPreview = computed(() => {
+            let lines = [`## ${statusTitle.value}`];
+            statusCategories.value.forEach(cat => {
+                lines.push(`\n### ${cat.icon} ${cat.name}`);
+                cat.fields.forEach(f => {
+                    lines.push(`- ${f.label}: ${f.value || ''} — ${f.description || ''}`);
+                });
+            });
+            return lines.join('\n');
+        });
+        async function loadStatusPresets() {
+            try {
+                const resp = await fetch('/api/status-sheet/presets');
+                const data = await resp.json();
+                statusPresets.value = data.presets || [];
+            } catch (e) { console.error(e); }
+        }
+        function onPresetChange() {
+            const p = statusPresets.value.find(x => x.id === statusPreset.value);
+            if (p && p.data) {
+                statusCategories.value = (p.data.categories || []).map(c => ({
+                    name: c.name, icon: c.icon || '📋',
+                    fields: (c.fields || []).map(f => ({ ...f, key: f.key || 'field_' + Date.now() }))
+                }));
+                statusTitle.value = p.data.title || '角色状态栏';
+            }
+        }
+        async function generateStatus() {
+            if (!statusCharName.value.trim()) return;
+            statusLoading.value = true;
+            try {
+                const resp = await fetch('/api/status-sheet/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ character_name: statusCharName.value, preset: statusPreset.value }) });
+                const data = await resp.json();
+                if (data.data) {
+                    Object.assign(statusFormData.value, data.data);
+                    statusData.value.name = data.data.name || statusCharName.value;
+                    statusData.value.mood = data.data.mood || '😊';
+                    statusData.value.location = data.data.location || '';
+                    statusData.value.health = data.data.health || 85;
+                    statusData.value.energy = data.data.energy || 70;
+                    statusData.value.affection = data.data.affection || 50;
+                    statusData.value.trust = data.data.trust || 50;
+                }
+            } catch (e) { console.error(e); }
+            statusLoading.value = false;
+        }
+        function copyStatusJSON() {
+            const config = { title: statusTitle.value, enabled: statusEnabled.value, refresh_mode: statusRefresh.value, display_mode: statusDisplay.value, prompt_format: statusFormat.value, categories: statusCategories.value };
+            navigator.clipboard.writeText(JSON.stringify(config, null, 2));
+            alert('已复制到剪贴板');
+        }
+        function saveStatusConfig() {
+            alert('配置已保存');
+        }
+
+        // Load on tab switch
+        watch(currentTab, (val) => {
+            if (val === 'library') loadLibrary();
+            if (val === 'lorebook') loadLorebooks();
+            if (val === 'status') loadStatusPresets();
+        });
+        onMounted(() => { loadStatusPresets(); });
+
+        function exportLibraryCard(c) {
+            const blob = new Blob([JSON.stringify(c, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (c.name || 'card') + '.json'; a.click();
+        }
+        async function deleteLibraryCard(id) {
+            if (!confirm('确定删除？')) return;
+            try { await fetch(`/api/library/cards/${id}`, { method: 'DELETE' }); loadLibrary(); } catch (e) {}
+        }
+        async function validateApiKey() {
+            alert('验证功能需要后端支持');
+        }
+
+        // Save/Export
+        async function saveCard() {
+            if (!genCard.value) return;
+            try { await fetch('/api/library/cards', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(genCard.value) }); alert('已保存'); } catch (e) { alert('保存失败'); }
+        }
+        function exportCard() {
+            if (!genCard.value) return;
+            const blob = new Blob([JSON.stringify(genCard.value, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = genCard.value.name + '.json'; a.click();
+        }
+
+        return {
+            currentTab, tabs, allSources, selSources, toggleSource,
+            query, searching, results, selectedIdx, aiEnabled, showAdvanced, selectedResult,
+            resultTabs, activeResultTab, selectResult, doSearch,
+            generating, genCard, chatMessages, lorebookEntries, genStats, cardFields, doGenerate,
+            statusData, statusBars, settings, saveCard, exportCard,
+            libraryCards, libSearch, loadLibrary, viewLibraryCard,
+            lorebooks, showCreateLorebook, newLorebookName, newLorebookDesc, loadLorebooks, createLorebook,
+            statusPreset, statusPresets, statusCharName, statusLoading, statusFormData, currentStatusFields, loadStatusPresets, generateStatus,
+            statusFormat, statusRefresh, statusTitle, statusEnabled, statusDisplay, statusCategories, statusPromptPreview,
+            onPresetChange, copyStatusJSON, saveStatusConfig,
+            megaSource, megaText, megaLoading, megaEntries, megaConcepts, doMegaLorebook, doExtractWorld, saveMegaLorebook,
+            graphNodes, graphLinks, graphColors, graphPhysics, buildGraph, resetGraph, toggleGraphPhysics,
+            longTitle, longText, longLoading, longResult, doLongText,
+            exportLibraryCard, deleteLibraryCard, validateApiKey,
+        };
+    }
+}).mount('#app');
+</script>
+</body>
+</html>
