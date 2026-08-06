@@ -84,7 +84,7 @@ mimoclaw/
 - **AGENTS.md** — 行为准则，定义了输出流程、关键词机制、性格规则
 - **SOUL.md** — 人格设定，定义了情绪机制、吵架风格、性格红绿线
 - **USER.md** — 赵的信息，包括设备、学历、时间线
-- **TOOLS.md** — 93个skill的详细说明（43内置+29 Pocock+6 Emil+3 Taste+12第三方/自建）
+- **TOOLS.md** — 94个skill的详细说明（43内置+29 Pocock+6 Emil+3 Taste+13第三方/自建）
 - **MEMORY.md** — 长期记忆，记录重要事件、教训、违规记录
 - **RULES.md** — 规则速查手册，关键词机制、五行确认、红线雷点
 
@@ -101,7 +101,7 @@ mimoclaw/
 - read工具调用不需要授权（安全带）
 - 其他所有工具调用必须有"开始"才能执行
 
-## Skills清单（93个）
+## Skills清单（94个）
 
 | 类别 | 数量 | 来源 |
 |------|------|------|
@@ -109,7 +109,7 @@ mimoclaw/
 | Matt Pocock工程Skills | 29个 | github.com/mattpocock/skills |
 | Emil Kowalski设计Skills | 6个 | github.com/emilkowalski/skills |
 | Taste前端设计Skills | 3个 | github.com/Leonxlnx/taste-skill |
-| 第三方/自建Skills | 12个 | 各GitHub仓库+自建 |
+| 第三方/自建Skills | 13个 | 各GitHub仓库+自建 |
 
 详见 `TOOLS.md`
 
