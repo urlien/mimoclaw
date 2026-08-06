@@ -2,10 +2,10 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## Skills 安装清单（93个）
+## Skills 安装清单（94个）
 
 > 最后更新：2026-08-07
-> 总计：93 个 skill（43 内置 + 29 Pocock + 6 Emil + 3 Taste + 12 第三方/自建）
+> 总计：94 个 skill（43 内置 + 29 Pocock + 6 Emil + 3 Taste + 13 第三方/自建）
 > 一键恢复：`bash install-skills.sh` + 补装脚本
 
 ---
@@ -159,7 +159,7 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 ### GitHub
 - Personal Access Token (PAT): 见 agent auth-profiles，赵于2026-07-22提供（更正版）
 
-### 第三方/自建 Skills（12个）
+### 第三方/自建 Skills（13个）
 
 | Skill | 说明 | 来源 |
 |-------|------|------|
@@ -167,6 +167,7 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 | **jina-reader** | Jina Reader，将网页转成 Markdown 供 AI 读取 | GitHub: jina-ai/reader-skill |
 | **iconify-skill** | 从 32K+ 图标库搜索、修改、输出 SVG 图标 | GitHub: bingal/iconify-skill |
 | **huashu-design** | 花叔 Design：HTML 高保真原型、交互 Demo、幻灯片、动画（GitHub 20k+ stars） | GitHub: alchaincyf/huashu-design |
+| **figures4papers** | 学术论文配图：柱状图、热力图、趋势图、雷达图、多面板布局——耶鲁大学博士Chen Liu的绘图哲学和辅助函数，发表于Nature Machine Intelligence、ICML、NeurIPS | GitHub: ChenLiu-1996/figures4papers |
 | **llm-wiki** | Karpathy LLM Wiki 方法论，自动构建知识库（GitHub 2.2k stars） | GitHub: sdyckjq-lab/llm-wiki-skill |
 | **browser-skill** | 腾讯开源浏览器桥接，复用登录态，AI 直接操作浏览器 | GitHub: Tencent/BrowserSkill |
 | **tavily-search** | Tavily AI 搜索，专为 AI 设计的搜索 API，国内友好 | GitHub: tavily-ai/tavily-skill |
