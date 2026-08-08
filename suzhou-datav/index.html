@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苏州城乡融合数据可视化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            color: #8892b0;
+            font-size: 1.1em;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .card-title {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #64ffda;
+        }
+        .card-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card-desc {
+            color: #8892b0;
+            font-size: 0.9em;
+        }
+        .chart-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        .chart-title {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #ccd6f6;
+        }
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(45deg, rgba(0,210,255,0.1), rgba(58,123,213,0.1));
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8892b0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #8892b0;
+            font-size: 0.9em;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64ffda;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>苏州城乡融合数据可视化平台</h1>
+            <p class="subtitle">苏州科技大学 · 城乡规划研究</p>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <span>系统状态：在线</span>
+            </div>
+            <div class="status-item">
+                <span>最后更新：2026-08-09</span>
+            </div>
+            <div class="status-item">
+                <span>数据来源：苏州市统计局</span>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-title">城镇化率</div>
+                <div class="card-value">82.3%</div>
+                <div class="card-desc">苏州市2025年城镇化率，较上年提升0.8个百分点</div>
+            </div>
+            <div class="card">
+                <div class="card-title">城乡收入比</div>
+                <div class="card-value">1.85:1</div>
+                <div class="card-desc">城乡居民人均可支配收入比，持续缩小</div>
+            </div>
+            <div class="card">
+                <div class="card-title">农村电商覆盖率</div>
+                <div class="card-value">96.5%</div>
+                <div class="card-desc">行政村电商服务站点覆盖率</div>
+            </div>
+            <div class="card">
+                <div class="card-title">乡村旅游收入</div>
+                <div class="card-value">285亿</div>
+                <div class="card-desc">2025年乡村旅游总收入，同比增长12.3%</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">苏州市城乡融合发展指数趋势（2018-2025）</div>
+            <div class="chart-placeholder">
+                [图表区域：折线图展示城乡融合发展指数变化趋势]
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">各区县城乡融合指标对比</div>
+            <div class="chart-placeholder">
+                [图表区域：柱状图展示各区县城乡融合指标]
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">城乡产业融合分布</div>
+            <div class="chart-placeholder">
+                [图表区域：饼图展示城乡产业融合分布]
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="#" class="btn">查看详细报告</a>
+            <a href="#" class="btn" style="margin-left: 15px; background: linear-gradient(90deg, #64ffda, #00d2ff);">下载数据</a>
+        </div>
+
+        <footer>
+            <p>© 2026 苏州科技大学 · 建筑与城市规划学院 · 城乡融合发展研究</p>
+            <p style="margin-top: 10px;">指导教师：侯爱敏教授</p>
+        </footer>
+    </div>
+
+    <script>
+        // 简单的动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+
+            // 状态点动画
+            const statusDot = document.querySelector('.status-dot');
+            if (statusDot) {
+                setInterval(() => {
+                    statusDot.style.opacity = statusDot.style.opacity === '0.5' ? '1' : '0.5';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
