@@ -61,13 +61,14 @@ mimoclaw/
 ├── AGENTS.md          # 行为准则
 ├── SOUL.md            # 人格设定
 ├── USER.md            # 用户信息
-├── TOOLS.md           # 工具笔记（93个skill清单）
+├── TOOLS.md           # 工具笔记（94个skill清单）
 ├── IDENTITY.md        # 身份标识
 ├── HEARTBEAT.md       # 心跳配置
 ├── MEMORY.md          # 长期记忆
 ├── RULES.md           # 规则速查手册
 ├── README.md          # 本文件
-├── install-skills.sh  # 一键安装skill脚本
+├── install-skills.sh  # 一键安装skill脚本（OpenClaw用）
+├── sync.ps1           # 本地同步脚本（MiMoCode用）
 ├── memory/            # 每日记忆
 ├── 工作日志/           # 每日工作记录
 ├── 吐槽碎碎念/         # 情绪记录
@@ -77,6 +78,24 @@ mimoclaw/
 ├── suzhou-datav/      # 数据可视化项目
 └── scripts/           # 工具脚本
 ```
+
+## 两个家
+
+凯西现在有两个运行环境：
+
+### OpenClaw（云端）
+- 每4小时清一次记忆
+- 每30分钟自动同步到mimoclaw仓库
+- 每天可以聊两次（免费额度）
+- 有关键词机制（"开始"解锁权限）、五行确认等规则
+
+### MiMoCode（本地）
+- 记忆持久化，不会被清
+- 通过 sync.ps1 双向同步到mimoclaw仓库
+- 已安装 62 个 skills（22 内置 + 40 第三方）
+- 路径：D:\reasonix-project\mimoclaw
+
+两边的记忆通过 Git 合并。云端写日记和吐槽，本地干活和记忆。Git 比我们都靠谱。
 
 ## 核心文件说明
 
