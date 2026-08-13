@@ -2,10 +2,11 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## Skills 安装清单（94个）
+## Skills 安装清单（97个）
 
-> 最后更新：2026-08-07
-> 总计：94 个 skill（43 内置 + 29 Pocock + 6 Emil + 3 Taste + 13 第三方/自建）
+> 最后更新：2026-08-13
+> 总计：97 个 skill（25 内置 + 29 Pocock + 6 Emil + 2 Taste + 27 Hermes + 8 自建/第三方）
+> MiMoCode本地：72个（.mimocode/skills/） + 25个内置（builtin_skills/）
 > 一键恢复：`bash install-skills.sh` + 补装脚本
 
 ---
@@ -119,7 +120,7 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ---
 
-### Taste 前端设计 Skills（3个）
+### Taste 前端设计 Skills（2个）
 
 > 来源：https://github.com/Leonxlnx/taste-skill
 > 安装：`bash install-skills.sh`
@@ -130,7 +131,56 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 |-------|------|
 | **taste-brandkit** | 高端品牌套件图像生成：品牌指南板、logo 系统、视觉世界演示——极简、电影感、暗黑科技、奢华风格 |
 | **taste-brutalist-skill** | 粗野主义界面：瑞士印刷排版 + 军事终端美学融合——刚性网格、极端字重对比、模拟退化效果，适合数据仪表盘 |
-| **taste-design-taste-frontend** | ⚠️ 安装失败（SKILL.md 内容为 404），需重新安装 |
+
+---
+
+### Hermes 工程/设计 Skills（27个）
+
+> 来源：Hermes 内置 skills 包
+> 安装日期：2026-08-11
+> 前缀：hermes-
+
+| Skill | 说明 |
+|-------|------|
+| **hermes-architecture-diagram** | 暗色主题 SVG 架构/云/基础设施图表，输出为 HTML |
+| **hermes-claude-design** | 设计一次性 HTML 作品（落地页、Deck、原型） |
+| **hermes-codebase-inspection** | 用 pygount 检查代码库：代码行数、语言占比 |
+| **hermes-comfyui** | ComfyUI 图片/视频/音频生成：安装、启动、管理节点/模型、运行工作流 |
+| **hermes-excalidraw** | 手绘风格 Excalidraw JSON 图表（架构图、流程图、序列图） |
+| **hermes-github-code-review** | 通过 gh 或 REST 审查 PR：diff、行内评论 |
+| **hermes-github-issues** | 通过 gh 或 REST 创建、分类、标签、分配 GitHub issues |
+| **hermes-github-pr-workflow** | GitHub PR 生命周期：分支、提交、开 PR、CI、合并 |
+| **hermes-github-repo-management** | 克隆/创建/fork 仓库；管理远程、发布 |
+| **hermes-huggingface-hub** | HuggingFace hf CLI：搜索/下载/上传模型、数据集 |
+| **hermes-humanizer** | 去除 AI 痕迹，让文本更自然 |
+| **hermes-jupyter-live-kernel** | 通过 live Jupyter kernel 迭代运行 Python |
+| **hermes-manim-video** | Manim CE 动画：3Blue1Brown 风格数学/算法视频 |
+| **hermes-nano-pdf** | 通过 nano-pdf CLI 编辑 PDF 文字/错误/标题（自然语言指令） |
+| **hermes-obsidian** | 在 Obsidian vault 中读取、搜索、创建和编辑笔记 |
+| **hermes-ocr-and-documents** | 从 PDF/扫描件提取文字（pymupdf, marker-pdf） |
+| **hermes-p5js** | p5.js 草图：生成艺术、着色器、交互、3D |
+| **hermes-popular-web-designs** | 54 个真实设计系统（Stripe、Linear、Vercel）的 HTML/CSS 参考 |
+| **hermes-python-debugpy** | Python 调试：pdb REPL + debugpy 远程（DAP） |
+| **hermes-simplify-code** | 并行 3 agent 清理最近的代码变更 |
+| **hermes-spike** | 一次性实验，验证想法后再正式构建 |
+| **hermes-systematic-debugging** | 4 阶段根因调试：先理解 bug 再修复 |
+| **hermes-youtube-content** | YouTube 转录到摘要、推文串、博客 |
+
+---
+
+### 思维框架 Skills（6个）
+
+> 安装日期：2026-08-13
+> 用途：分析问题时切换不同人物视角
+
+| Skill | 说明 |
+|-------|------|
+| **alliance-drift** | 同盟对象转移与联盟管理框架——防御性联盟如何渐变为进攻性联盟 |
+| **crisis-escalation-model** | 危机逐步升级模型——"不扩大方针"为何系统性失败 |
+| **diplomacy-military-parallel** | 外交谈判与军事准备并行框架——并行准备如何毒化谈判 |
+| **fait-accompli-tension** | "不扩大方针"与"既成事实"的张力模型——政策为何无法约束前线 |
+| **irreversible-escalation** | 不可逆滑坡模型——"别无选择"叙事是路径依赖的预警信号 |
+| **self-preservation-decision** | 资源困境下的"自存自卫"决策框架——"窗口期"判断中的乐观偏见 |
 
 ---
 
@@ -159,7 +209,7 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 ### GitHub
 - Personal Access Token (PAT): 见 agent auth-profiles，赵于2026-07-22提供（更正版）
 
-### 第三方/自建 Skills（13个）
+### 第三方/自建 Skills（16个）
 
 | Skill | 说明 | 来源 |
 |-------|------|------|
@@ -174,6 +224,8 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 | **coding-agent** | 代码代理 skill，辅助代码生成和调试 | OpenClaw skills registry |
 | **code-lint-plugin** | 代码 lint 插件，自动检查代码质量 | OpenClaw skills registry |
 | **nuwa-skill** | 女娲.skill，蒸馏名人思维方式（乔布斯、马斯克、芒格、费曼等 14 人） | GitHub: nuwa-ai/nuwa-skill |
+| **humanizer-zh** | 中文去 AI 痕迹：检测并修复夸大象征、宣传语言、AI 词汇等模式 | 2026-08-11 安装 |
+| **minimax** | MiniMax 模型集成 | 2026-08-11 安装 |
 | **proxy-cn** | 智能代理脚本，自动匹配 github/npm/pypi 等域名注入代理 | 🆕 自建 |
 | **gufa-frontend** | 古法前端需求描述法，用布局/组件/数据/状态/交互五个维度描述页面 | 🆕 自建 |
 
