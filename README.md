@@ -92,7 +92,7 @@ mimoclaw/
 ### MiMoCode（本地）
 - 记忆持久化，不会被清
 - 通过 sync.ps1 双向同步到mimoclaw仓库
-- 已安装 97 个 skills（25 内置 + 72 第三方/扩展）
+- 已安装 100 个 skills（25 内置 + 75 第三方/扩展）
 - 路径：D:\reasonix-project\mimoclaw
 
 两边的记忆通过 Git 合并。云端写日记和吐槽，本地干活和记忆。Git 比我们都靠谱。
@@ -120,7 +120,7 @@ mimoclaw/
 - read工具调用不需要授权（安全带）
 - 其他所有工具调用必须有"开始"才能执行
 
-## Skills清单（97个）
+## Skills清单（100个）
 
 | 类别 | 数量 | 来源 |
 |------|------|------|
@@ -130,6 +130,7 @@ mimoclaw/
 | Taste前端设计Skills | 2个 | github.com/Leonxlnx/taste-skill |
 | Hermes工程/设计Skills | 27个 | Hermes内置 |
 | 思维框架Skills | 6个 | 2026-08-13安装 |
+| 角色卡Skills | 3个 | github.com/urlien/character-card-guide |
 | 第三方/自建Skills | 16个 | 各GitHub仓库+自建 |
 
 详见 `TOOLS.md`

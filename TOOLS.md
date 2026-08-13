@@ -2,11 +2,11 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## Skills 安装清单（97个）
+## Skills 安装清单（100个）
 
 > 最后更新：2026-08-13
-> 总计：97 个 skill（25 内置 + 29 Pocock + 6 Emil + 2 Taste + 27 Hermes + 8 自建/第三方）
-> MiMoCode本地：72个（.mimocode/skills/） + 25个内置（builtin_skills/）
+> 总计：100 个 skill（25 内置 + 29 Pocock + 6 Emil + 2 Taste + 27 Hermes + 6 思维框架 + 3 角色卡 + 2 自建）
+> MiMoCode本地：75个（.mimocode/skills/） + 25个内置（builtin_skills/）
 > 一键恢复：`bash install-skills.sh` + 补装脚本
 
 ---
@@ -181,6 +181,20 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 | **fait-accompli-tension** | "不扩大方针"与"既成事实"的张力模型——政策为何无法约束前线 |
 | **irreversible-escalation** | 不可逆滑坡模型——"别无选择"叙事是路径依赖的预警信号 |
 | **self-preservation-decision** | 资源困境下的"自存自卫"决策框架——"窗口期"判断中的乐观偏见 |
+
+---
+
+### 角色卡 Skills（3个）
+
+> 来源：https://github.com/urlien/character-card-guide
+> 安装日期：2026-08-13
+> 基于 Discord「魅魔藏经阁」458篇技术帖 + 完整制作案例
+
+| Skill | 说明 |
+|-------|------|
+| **character-card-creation** | 角色卡制作全流程：7步制作法、人设模板、状态栏（Shadow DOM）、正则四步法、世界书5位置、侧边栏防覆盖、全局美化、编码系统（60位）、AI肘击技巧 |
+| **sexyai-api** | sexyai.ai（魅魔岛）API 完整调用指南：双重认证、PowerShell/Python 模板、20+ 端点、角色卡数据结构、浏览器直连途径 |
+| **arknights-lore** | 明日方舟剧情数据查询：剧情索引 API、剧情原文获取、干员语音抓取、角色设定研究流程、465个本地剧情文件 |
 
 ---
 
