@@ -1,0 +1,95 @@
+D盘误删事件 - 补救工作交接清单
+（交接时间：2026-08-14 凌晨，交给接手人）
+
+══════════════════════════════════════════
+一、事故根源（一句话）
+══════════════════════════════════════════
+删除 C 盘旧备份时，rmdir 命令引号转义错误，误删了 D 盘根目录，
+导致 D 盘约 300GB 数据被永久删除（不进回收站）。
+
+被删的目录：
+- D:\Git、D:\CosyVoice、D:\Clash Verge、D:\PilotBrowseMCP、
+  D:\puppeteer-cache、D:\git-projects
+- mimocode、hermes-desktop、Ollama、Python312 的内容被删空（目录壳还在）
+- 15 个技能（在 D:\reasonix-home\skills\global）
+- D:\REASONIX-Desktop\Reasonix 除 versions 外的内容
+- D:\reasonix-project 的 node_modules（tavily/duckduckgo/academic 插件本体）
+
+其他影响：
+- 系统代理被关闭（HKCU\...\Internet Settings 的 ProxyEnable 从 1 改为 0；
+  原代理服务器 127.0.0.1:7897，指向 Clash Verge）
+- 幸存：E 盘全部游戏数据、D:\reasonix-home 正在使用的会话文件、
+  D:\reasonix-project 部分、Chrome、Hermes 被占用文件
+
+══════════════════════════════════════════
+二、已完成的补救
+══════════════════════════════════════════
+1. [已恢复] D:\reasonix-home 核心文件
+   config.toml、MEMORY.md（记忆）、.env（API keys）、state、install-id
+   来源：C 盘旧残留 C:\Users\19615\AppData\Roaming\reasonix（先别删，是恢复源）
+
+2. [已恢复] 网络直连（GitHub 可访问）
+   方法：关闭失效的 Clash 代理（127.0.0.1:7897 无进程监听）
+   注意：GitHub 大文件下载被限速 ~10KB/s，需用国内镜像（ghfast.top、gh-proxy.com）
+
+3. [已恢复] 技能 5 个装回 D:\reasonix-home\skills\global：
+   conf-papers、extract-paper-images、paper-analyze、paper-search、start-my-day
+   （来自 juliye2025/evil-read-arxiv 仓库）
+
+4. [已安装，但装错盘] Recuva 已安装到 C:\Program Files\Recuva
+   （桌面有快捷方式指向 recuva64.exe；本应装 E 盘，遵守"不装C盘"规则，
+   需要时可卸载重装到 E:\Recuva）
+   Recuva 安装包副本：E:\Recuva-Setup\rcsetup.exe（24.5MB）
+
+5. [已下载] 恢复工具 TestDisk/PhotoRec（20.9MB，已解压）
+   位置：临时目录（见第四节，会话结束会被清理，需尽快移走）
+
+6. [已下载] garden-skills 技能包（15.6MB，ConardLi/garden-skills）
+   含 5 技能：beautiful-article、gpt-image-2、kb-retriever、
+   web-design-engineer、web-video-presentation（未装回）
+
+══════════════════════════════════════════
+三、未完成事项（接手人需要做的）
+══════════════════════════════════════════
+1. Clash Verge：未装（下载失败，GitHub 限速）。需用镜像站下载 v2.5.2
+   （clash-verge-rev/clash-verge-rev）装回 D:\Clash Verge，
+   装好后恢复系统代理指向 127.0.0.1:7897（ProxyEnable=1），并导入赵的订阅配置
+
+2. Git：未装（原位置 D:\Git）
+
+3. pilot-browse 插件：未装（原 D:\PilotBrowseMCP，仓库 EndymionLee/PilotBrowseMCP）
+
+4. CosyVoice：未装（原 D:\CosyVoice，阿里开源仓库）
+
+5. garden 5 技能：包已下载，需解压后复制到 D:\reasonix-home\skills\global
+
+6. 另外 5 技能来源不明，需找回：
+   grill-me、grilling、huashu-nuwa、scientific-figure-making、iconify-skill
+
+7. D:\reasonix-project 插件本体需重装：
+   tavily-mcp、duckduckgo-mcp-server、pylibs(academic_mcp)
+
+8. 【最重要】数据恢复扫描还没做：
+   用 Recuva 深度扫描 D 盘（2-6 小时挂机），恢复目标必须是非 D 盘
+   （E 盘剩 73G；C 盘剩 122G），先恢复文档/图片/压缩包等个人数据，
+   程序文件不用恢复直接重装
+
+══════════════════════════════════════════
+四、临时目录位置（重要！会话结束会被系统清理）
+══════════════════════════════════════════
+C:\Users\19615\AppData\Local\Temp\reasonix-session-tmp-1172909063\recovery-tools\
+   - recuva-setup.exe（24.5MB，Recuva 安装包）
+   - testdisk.zip（20.9MB，已解压，含 PhotoRec）
+   - garden.zip（15.6MB，garden-skills 技能包）
+   - evil\（已解压的 evil-read-arxiv，5 技能源）
+这些文件需要尽快移到持久位置（建议 E 盘），否则会话结束就没了。
+
+══════════════════════════════════════════
+五、接手注意事项
+══════════════════════════════════════════
+1. 恢复目标绝不放 D 盘（会覆盖待恢复数据）
+2. GitHub 下载一律走镜像（ghfast.top、gh-proxy.com）绕开限速
+3. C:\Users\19615\AppData\Roaming\reasonix（旧残留）先保留，是恢复源
+4. 系统代理：Clash 装好前保持 ProxyEnable=0（否则所有走代理请求挂死）；
+   Clash 装好后恢复 =1 并指回 127.0.0.1:7897
+5. 所有涉及删除的操作，执行前必须把确切路径列出来人工确认
