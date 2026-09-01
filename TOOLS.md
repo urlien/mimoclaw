@@ -2,11 +2,11 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## Skills 安装清单（100个）
+## Skills 安装清单（156个）
 
-> 最后更新：2026-08-13
-> 总计：100 个 skill（25 内置 + 29 Pocock + 6 Emil + 2 Taste + 27 Hermes + 6 思维框架 + 3 角色卡 + 2 自建）
-> MiMoCode本地：75个（.mimocode/skills/） + 25个内置（builtin_skills/）
+> 最后更新：2026-09-01
+> 总计：156 个 skill（27 内置 + 129 本地）
+> MiMoCode本地：129个（.mimocode/skills/） + 27个内置（builtin_skills/）
 > 一键恢复：`bash install-skills.sh` + 补装脚本
 
 ---
